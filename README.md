@@ -1,4 +1,4 @@
 responsiveDojoxApp
 ==================
 
-Test of a responsive dojox.app
+Test of responsive dojox.app
