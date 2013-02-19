@@ -1,0 +1,40 @@
+{
+	"id": "firstApp",
+	"loaderConfig": {
+		"paths": {
+			"firstApp": "../../responsiveDojoxApp/firstApp",
+			
+		}
+	},
+	"modules": [
+	],
+	"dependencies": [
+		"dojox/mobile/TransitionEvent"
+	],
+	"noAutoLoadControllers" : true,
+	"controllers": [
+		"dojox/app/controllers/History",
+		"dojox/app/controllers/Load",
+		"dojox/app/controllers/Transition",
+		"firstApp/controllers/CustomLayout"
+	],
+	"defaultTransition": "none",
+	"defaultView": "list",
+	"views": {
+		"list": {
+			"definition": "none",
+			"template": "firstApp/views/list.html",
+			"constraint": ""
+		},
+		"detail": {
+			"definition": "none",
+			"template": "firstApp/views/detail.html",
+			"constraint": ""
+		},
+		"edit": {
+			"definition": "none",
+			"template": "firstApp/views/edit.html",
+			"constraint": ""
+		}
+	}
+}

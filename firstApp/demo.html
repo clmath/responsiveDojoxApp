@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<!--
+		<link rel="apple-touch-icon-precomposed" href="images/todolist.png"/>
+		<link rel="apple-touch-startup-image" href="images/todo-splash.png" />-->
+		<title>Contacts App</title>
+		
+		<link rel="stylesheet" href="../../DojoToolkitAptana/dijit/themes/claro/layout/BorderContainer.css">
+		<link rel="stylesheet" href="../../DojoToolkitAptana/dijit/themes/claro/layout/ContentPane.css">
+		<link rel="stylesheet" href="../../DojoToolkitAptana/dijit/themes/claro/claro.css">
+		<style>
+			html,body {
+				width: 100%;
+				height: 100%;
+				margin: 0px;
+				padding: 0px;
+			}
+		</style>
+		<script type="text/javascript" src="../../DojoToolkitAptana/dojo/dojo.js"
+				data-dojo-config="async: true, parseOnLoad: true">
+		</script>
+		<script>
+			require(["dojox/app/main", "dojox/json/ref"],
+				function(Application, json){
+				require(["dojo/text!./config.json"], function(configJson){
+					Application(json.fromJson(configJson));
+				});
+			});
+		</script>
+	</head>
+	<body class="claro"></body>
+</html>
