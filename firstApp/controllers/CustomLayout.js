@@ -1,14 +1,18 @@
 define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/window",
-		"dojo/query", "dojo/dom-geometry", "dojo/dom-attr", "dojo/dom-style", "dijit/registry",
+		"dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-attr", "dojo/dom-style", "dijit/registry",
 		"dojox/app/controllers/LayoutBase", "dojox/app/utils/layout", "dojox/app/utils/constraints"],
-function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry, LayoutBase, layout, constraints){
+function(declare, lang, array, win, query, domConstruct, domGeom, domAttr, domStyle, registry, LayoutBase, layout, constraints){
 	// module:
 	//		firstApp/controllers/CustomLayout
 	// summary:
 	//		Bind "initLayout" and "layoutView" events on dojox/app application instance.
 
-	return declare(LayoutBase, {
+		var hashtable = {};
+		
 
+	return declare(LayoutBase, {
+		
+	
 		constructor: function(app, events){
 			// summary:
 			//		bind "initLayout" and "layoutView" events on application instance.
@@ -32,14 +36,15 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 			this.app.log("in app/controllers/Layout.initLayout event=",event);
 			this.app.log("in app/controllers/Layout.initLayout event.view.parent.name=[",event.view.parent.name,"]");
 
-			event.view.parent.domNode.appendChild(event.view.domNode);
+			/*event.view.parent.domNode.appendChild(event.view.domNode);*/
 
-			domAttr.set(event.view.domNode, "data-app-constraint", event.view.constraint);
+			//domAttr.set(event.view.domNode, "data-app-constraint", event.view.constraint);
+			domAttr.set(event.view.domNode, "class", "view");
 
 			this.inherited(arguments);
 		},
 
-		_doResize: function(view){
+		/*_doResize: function(view){
 			// summary:
 			//		resize view.
 			//
@@ -88,9 +93,9 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 			}
 
 			this.inherited(arguments);
-		}
+		},*/
 
-		/*layoutView: function(event){
+		layoutView: function(event){
 			// summary:
 			//		Response to dojox/app "layoutView" event.
 			//
@@ -100,14 +105,26 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 			//
 			// event: Object
 			// |		{"parent":parent, "view":view, "removeView": boolean}
-			if(event.view){
+			/*if(event.view){
 				this.inherited(arguments);
 				// do selected view layout
 				// call _doResize for parent and view here, doResize will no longer call it for all children.
 				this._doResize(event.parent || this.app);
 				this._doResize(event.view);
+			}*/
+			var node;
+			
+			if(!event.removeView){
+				node = event.parent.domNode.appendChild(event.view.domNode);
+				if (hashtable[event.view.id]){
+					node.innerHTML = hashtable[event.view.id];
+				}
+			} else {
+				node = event.view.domNode;
+				hashtable[event.view.id] = node.innerHTML;
+				domConstruct.destroy(node);
 			}
-		},*/
+		}
 
 		
 	});

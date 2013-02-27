@@ -6,6 +6,7 @@
 			
 		}
 	},
+	"transit" : "firstApp/modules/transit",
 	"modules": [
 	],
 	"dependencies": [
