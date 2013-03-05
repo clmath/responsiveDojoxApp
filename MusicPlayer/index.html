@@ -25,7 +25,7 @@
     	
     	<div data-dojo-type="my/ResponsiveContainer2" data-dojo-id="cont" data-dojo-props="mainView:'view2'" style="height:100%">
 	   
-			<div id="view2" data-dojo-view class="view">
+			<!-- <div id="view2" data-dojo-view class="view">
 			    <h1 data-dojo-type="dojox.mobile.Heading">Music Player</h1>
 			    <h2 data-dojo-type="dojox.mobile.RoundRectCategory">Local music</h2>
 			    <ul data-dojo-type="dojox.mobile.RoundRectList" onclick="cont.display('view1','content')">
@@ -75,7 +75,214 @@
 					<li data-dojo-type="dojox.mobile.ListItem">The Ascent of Man</li>
 					<li data-dojo-type="dojox.mobile.ListItem">Around the Sun</li>
 				</ul>
-		</div>
+		</div>-->
+		
+		<div id="view2" data-dojo-view="" class="view">
+				<h1 class="mblHeading"><span class="mblHeadingSpanTitle">Music Player</span>
+				<div class="mblHeadingDivTitle">
+					Music Player
+				</div></h1>
+				<h2 class="mblRoundRectCategory">Local music</h2>
+				<ul onclick="cont.display('view1','content')" class="mblRoundRectList">
+					<li data-dojo-props="rightText:'14'" class="mblListItem">
+						<div class="mblListItemRightText">
+							14
+						</div>
+						<div class="mblListItemLabel">
+							Albums
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemRightText">
+							5
+						</div>
+						<div class="mblListItemLabel">
+							Artists
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemRightText">
+							3
+						</div>
+						<div class="mblListItemLabel">
+							Playlists
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemRightText">
+							10
+						</div>
+						<div class="mblListItemLabel">
+							Radios
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemRightText">
+							96
+						</div>
+						<div class="mblListItemLabel">
+							Songs
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div id="view1" data-dojo-view="" class="view">
+				<h1 class="mblHeading">
+					<span class="mblHeadingSpanTitle">Albums</span>
+				<div class="mblHeadingDivTitle">
+					Albums
+				</div></h1>
+				<ul onclick="cont.display('view3','content')" class="mblRoundRectList">
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Accelerate
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Around the Sun
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Automatic for the People
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Collapse into Now
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Document
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Fables of the Reconstruction
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Green
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Lifes Rich Pageant
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Monster
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Murmur
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							New Adventures in Hi-Fi
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Out of Time
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Reckoning
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Reveal
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Up
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div id="view3" data-dojo-view="" class="view">
+				<h1 class="mblHeading"><span class="mblHeadingSpanTitle">Tracks</span>
+				<div class="mblHeadingDivTitle">
+					Tracks
+				</div></h1>
+				<ul class="mblRoundRectList">
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Leaving New York
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Electron Blue
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							The Outsiders
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Makes It All Okay
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Final Straw
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							I Wanted to Be Wrong
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Wanderlust
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Boy in the Well
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Aftermath
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							High Speed Train
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							The Worst Joke Ever
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							The Ascent of Man
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Around the Sun
+						</div>
+					</li>
+				</ul>
+			</div>
     	</div>
     </body>
 </html>	
