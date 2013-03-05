@@ -1,13 +1,12 @@
 .mblResponsiveOverlay {
 	box-sizing: border-box;
 	background: white;
-	padding: 1em;
-	font: black;
+	color: black;
 	width: 100%;
 	height: 100%;
 	position: fixed;
 	opacity: 0.75;
-	z-index: 9001; /* It's over nine thousands !!!!! http://www.youtube.com/watch?v=SiMHTK15Pik */
+	z-index: 9001; /* It's over nine thousands !!!!! */
 }
 
 .mblResponsiveOverlay_top {
