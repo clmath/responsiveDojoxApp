@@ -4,7 +4,8 @@
 	box-sizing: border-box;
 	border-left: 1px solid black;
 	height:100%;
-/*	display:none;*/
+	overflow: auto;
+	/*display:none;*/
 }
 #content {
 	height: 100%;
@@ -18,4 +19,5 @@
 	.view {
 		display:block;
 	}
-}*/
+}
+*/

@@ -2,6 +2,8 @@
 <html>
     <head>
         <meta charset="utf-8" />
+        <meta name="viewport" content="initial-scale=1.0" />
+
         <title>Responsive Music Player</title>
 		<link href="/responsiveDojoxApp/mobileApp/themes/iphone/iphone.css"
 	            rel="stylesheet"></link>
@@ -11,21 +13,20 @@
 		</script>
 	    <script>
 			// Load the widget parser and mobile base
-			require(["dojo/parser", "dojox/mobile", "dojo/ready"],
+			require(["dojo/parser", "dojox/mobile","dojo/ready"],
 			function(parser) {
 				// Parse the page for widgets!
 				parser.parse();
 			});
 	    </script>  
   
-  		<meta name="viewport" content="width=device-width, height=device-height">
     </head>
  
     <body>
     	
     	<div data-dojo-type="my/ResponsiveContainer2" data-dojo-id="cont" data-dojo-props="mainView:'view2'" style="height:100%">
-	   
-			<!-- <div id="view2" data-dojo-view class="view">
+	   <!--
+			<div id="view2" data-dojo-view class="view">
 			    <h1 data-dojo-type="dojox.mobile.Heading">Music Player</h1>
 			    <h2 data-dojo-type="dojox.mobile.RoundRectCategory">Local music</h2>
 			    <ul data-dojo-type="dojox.mobile.RoundRectList" onclick="cont.display('view1','content')">
@@ -58,25 +59,26 @@
 				</ul>
 			</div>
 		
-		<div id="view3" data-dojo-view class="view">
-			<h1 data-dojo-type="dojox.mobile.Heading">Tracks</h1>
-			    <ul data-dojo-type="dojox.mobile.RoundRectList">
-					<li data-dojo-type="dojox.mobile.ListItem">Leaving New York</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Electron Blue</li>
-					<li data-dojo-type="dojox.mobile.ListItem">The Outsiders</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Makes It All Okay</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Final Straw</li>
-					<li data-dojo-type="dojox.mobile.ListItem">I Wanted to Be Wrong</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Wanderlust</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Boy in the Well</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Aftermath</li>
-					<li data-dojo-type="dojox.mobile.ListItem">High Speed Train</li>
-					<li data-dojo-type="dojox.mobile.ListItem">The Worst Joke Ever</li>
-					<li data-dojo-type="dojox.mobile.ListItem">The Ascent of Man</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Around the Sun</li>
-				</ul>
-		</div>-->
-		
+			<div id="view3" data-dojo-view class="view">
+				<h1 data-dojo-type="dojox.mobile.Heading">Tracks</h1>
+				    <ul data-dojo-type="dojox.mobile.RoundRectList">
+						<li data-dojo-type="dojox.mobile.ListItem">Leaving New York</li>
+						<li data-dojo-type="dojox.mobile.ListItem">Electron Blue</li>
+						<li data-dojo-type="dojox.mobile.ListItem">The Outsiders</li>
+						<li data-dojo-type="dojox.mobile.ListItem">Makes It All Okay</li>
+						<li data-dojo-type="dojox.mobile.ListItem">Final Straw</li>
+						<li data-dojo-type="dojox.mobile.ListItem">I Wanted to Be Wrong</li>
+						<li data-dojo-type="dojox.mobile.ListItem">Wanderlust</li>
+						<li data-dojo-type="dojox.mobile.ListItem">Boy in the Well</li>
+						<li data-dojo-type="dojox.mobile.ListItem">Aftermath</li>
+						<li data-dojo-type="dojox.mobile.ListItem">High Speed Train</li>
+						<li data-dojo-type="dojox.mobile.ListItem">The Worst Joke Ever</li>
+						<li data-dojo-type="dojox.mobile.ListItem">The Ascent of Man</li>
+						<li data-dojo-type="dojox.mobile.ListItem">Around the Sun</li>
+					</ul>
+			</div>
+			-->
+			
 		<div id="view2" data-dojo-view="" class="view">
 				<h1 class="mblHeading"><span class="mblHeadingSpanTitle">Music Player</span>
 				<div class="mblHeadingDivTitle">

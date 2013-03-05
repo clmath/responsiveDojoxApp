@@ -90,7 +90,7 @@ define([
 		
 		resize: function(){
 			this.inherited(arguments);
-			win.body().style.height=win.global.innerHeight+'px';
+			win.body().style.height= (win.global.innerHeight || win.doc.documentElement.clientHeight)+"px";
 		}
 	});
 });
