@@ -16,7 +16,7 @@ define([
 		_overlay: null,
 		
 		// _content: [private] ResponsiveContent
-		//				pointer to the content div			
+		//				pointer to the content widget		
 		_content: null,
 		
 		
