@@ -2,12 +2,20 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <meta name="viewport" content="initial-scale=1.0" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <title>Responsive Music Player</title>
 		<link href="../../DojoToolkitAptana/dojox/mobile/themes/iphone/iphone.css"
 	            rel="stylesheet"></link>
 		<link href="css/style.css" rel="stylesheet"></link>
+		<script>
+			if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+				alert("ieMobile");
+				var msViewportStyle = document.createElement("style");
+				msViewportStyle.appendChild(document.createTextNode("@-ms-viewport{width:auto!important}"));
+				document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
+			}
+		</script>
 		<script type="text/javascript" src="../../DojoToolkitAptana/dojo/dojo.js"
 					data-dojo-config="async: true, packages: [{ name: 'my', location: '../../responsiveDojoxApp/MusicPlayer/modules'}], parseOnLoad: false">
 		</script>
@@ -196,6 +204,36 @@
 						</div>
 					</li>
 					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Reckoning
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Reveal
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Up
+						</div>
+					</li>
+				<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Reckoning
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Reveal
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Up
+						</div>
+					</li>
+				<li class="mblListItem">
 						<div class="mblListItemLabel">
 							Reckoning
 						</div>
