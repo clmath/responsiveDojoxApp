@@ -10,8 +10,9 @@ define([
 	"dojo/dom-class",
 	"dojo/on",
 	"dojo/_base/lang",
-	"dojo/query"
-], function(declare, arrayUtil, win, _Container, _WidgetBase, dom, domConstruct, domAttr, domClass, on, lang, query){
+	"dojo/query",
+	"dojox/css3/transit"
+], function(declare, arrayUtil, win, _Container, _WidgetBase, dom, domConstruct, domAttr, domClass, on, lang, query, transit){
 
 	// module:
 	//		my/ResponsiveContainer
@@ -87,8 +88,9 @@ define([
 				//view already displayed at current depth so just update the view
 				if (this._currentDepth === depth && this._MPdepths[depth] !== viewId){
 					this._MPslider.appendChild(viewDomNode);
-					domConstruct.place(dom.byId(this._MPdepths[this._currentDepth]), this.domNode, "last");
-					this._MPdepths[depth] = viewId;			
+					/*domConstruct.place(dom.byId(this._MPdepths[this._currentDepth]), this.domNode, "last");*/
+					transit(dom.byId(this._MPdepths[this._currentDepth]), viewDomNode, {transition:"slide"})
+					this._MPdepths[depth] = viewId;
 				} else if (this._currentDepth === (depth-1)){ //add a new depth level 
 					this._currentDepth++;
 					this._MPdepths.push(viewId); 
