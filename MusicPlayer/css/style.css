@@ -9,10 +9,13 @@
 	border-left: 1px solid black;
 	height:100%;
 	overflow: auto;
+	-webkit-transition: -webkit-transform 1s ease;
 }
 
 #content {
 	height: 100%;
+	overflow:hidden;
+	width:133.33333333%;
 }
 
 #content .view:first-child{

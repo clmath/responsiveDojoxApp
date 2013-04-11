@@ -1,0 +1,197 @@
+@-ms-viewport {
+	width:device-width; 
+}
+
+@widget: responsiveContainer;
+@slider: slider;
+@maxPanes: 4;
+@ANIMATION_DURATION: 0.7s;
+
+#@{widget} {
+	height: 100%;
+
+	.viewFrame{  /*Useful for transition*/
+		width: (100%/(@maxPanes+1));
+		height: 100%;
+		overflow: hidden;
+	}
+	
+	.view {
+		float:left;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+		border-right: 1px solid black;
+		overflow: auto;
+		display:block;
+
+  
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  -ms-perspective: 1000;
+  perspective: 1000;		
+
+	}
+	
+	>.view{display:none;}
+	
+	#multiPanes {
+		height: 100%;
+		overflow:hidden;
+		width: 100%;
+	}
+	
+	#multiPanes #@{slider}>.view:last-child{
+		border: none;
+	}
+
+	#@{slider} {
+		height: 100%;
+	
+	}
+	
+	/* MediaQueries matching */
+  #MQmatch{
+    position: absolute;
+    top: -3000px;
+    left: -3000px;
+    width:1px;
+    height:1px;
+    visibility: hidden;
+  }    
+		
+	/* Animations */
+
+	/* generating the class needed for the transitions */
+	@i: 1;
+	.while (@i) when (@i =< @maxPanes) {
+		#@{slider}.col@{i} {
+	    	@tmp: (100*(@maxPanes+1)/@i);
+	    	width: ~"@{tmp}%";
+		}	
+		.while(@i+1);
+	}
+	.while(@i);
+
+  
+  #@{slider}.slideTransition {
+    -webkit-transform: translateX( (-100%/(@maxPanes+1)));
+    -webkit-transition: -webkit-transform @ANIMATION_DURATION ease;
+  }
+  
+	#@{slider}.widthTransition {
+		-webkit-transition: width @ANIMATION_DURATION ease;
+	}
+
+  /* MediaQueries */
+  @media (max-width: 800px) and (min-width: 401px) {
+    #MQmatch{
+      width: 2px;
+    } 
+    
+    #@{slider}>.view {
+      display:none;
+    }
+  
+    #@{slider}.slideTransition > .view:nth-last-child(-n+3){
+      display:block; 
+    }
+
+    #@{slider} > .view:nth-last-child(-n+2){
+      display:block; 
+    }
+    
+    @i: 3;
+    .while (@i) when (@i =< @maxPanes) {
+      #@{slider}.col@{i} {
+          @tmp: (100*(@maxPanes+1)/2);
+          width: ~"@{tmp}%";
+      } 
+      .while(@i+1);
+    }
+    .while(@i);
+  }
+
+  @media (max-width: 400px){
+    #MQmatch{
+      width: 3px;
+    } 
+    
+    #@{slider}>.view {
+      display:none;
+    }
+
+    #@{slider}.slideTransition > .view:nth-last-child(-n+2){
+      display:block; 
+    }
+ 
+  
+    #@{slider} > .view:last-child{
+      display:block; 
+    }
+    
+    @i: 2;
+    .while (@i) when (@i =< @maxPanes) {
+      #@{slider}.col@{i} {
+          @tmp: (100*(@maxPanes+1)/1);
+          width: ~"@{tmp}%";
+      } 
+      .while(@i+1);
+    }
+    .while(@i);
+  }
+}
+
+
+#sidePane {
+  box-sizing: border-box;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 275px;
+  /*opacity: 0.75;*/
+  z-index: 9001;
+  display: none;
+  
+  >.view {
+    width: 100%;
+  }
+  
+}
+
+.overlayed {
+    margin-left:275px!important;
+    width: auto!important;
+    min-width: 300px;
+}
+  
+/*
+@media (min-width: 1000px) {
+  .overlayed {
+    margin-left:275px!important;
+    width: auto!important;
+  }
+  
+  #sidePane{
+    opacity: 1;
+  }
+}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
