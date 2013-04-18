@@ -2,14 +2,28 @@
 	width:device-width; 
 }
 
+html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
+
+
 @widget: responsiveContainer;
 @slider: slider;
-@maxPanes: 4;
+@maxPanes: 3;
 @ANIMATION_DURATION: 0.7s;
+@slidePaneWidth: 275px;
+@widthPartialView: (@slidePaneWidth+40); // 40 is the visible part of the view under the slide
+
+@maxValue: 0;
+.max (@a; @b) when (@a >= @b) { @maxValue: @a }
+.max (@a; @b) when (@a < @b) { @maxValue: @b }
 
 #@{widget} {
+	// Scope variable : @i
+	-webkit-perspective: 1000;
 	height: 100%;
-
+	width: 100%;
+	position: relative;
+  	overflow: hidden;
+  	
 	.viewFrame{  /*Useful for transition*/
 		width: (100%/(@maxPanes+1));
 		height: 100%;
@@ -23,13 +37,8 @@
 		border-right: 1px solid black;
 		overflow: auto;
 		display:block;
-
-  
-  -webkit-perspective: 1000;
-  -moz-perspective: 1000;
-  -ms-perspective: 1000;
-  perspective: 1000;		
-
+		
+		
 	}
 	
 	>.view{display:none;}
@@ -37,27 +46,50 @@
 	#multiPanes {
 		height: 100%;
 		overflow:hidden;
-		width: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 9100;
+		
+		#@{slider} {
+			height: 100%;
+		}
+		
+		#@{slider} > .view:last-child{
+			border: none;
+		}
+		
+		&.overlayed {
+			left: @slidePaneWidth;
+			min-width: 300px;
+		}	
 	}
 	
-	#multiPanes #@{slider}>.view:last-child{
-		border: none;
-	}
-
-	#@{slider} {
+	#sidePane {
+		box-sizing: border-box;
 		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		width: @slidePaneWidth;
+		z-index: 9001;
 	
+		display: none;>.view {
+			width: 100%;
+		}
 	}
 	
 	/* MediaQueries matching */
-  #MQmatch{
-    position: absolute;
-    top: -3000px;
-    left: -3000px;
-    width:1px;
-    height:1px;
-    visibility: hidden;
-  }    
+	#MQmatch{
+		position: fixed;
+		top: -3000px;
+		left: -3000px;
+		width:1px;
+		height:1px;
+		visibility: hidden;
+	}
 		
 	/* Animations */
 
@@ -65,133 +97,197 @@
 	@i: 1;
 	.while (@i) when (@i =< @maxPanes) {
 		#@{slider}.col@{i} {
-	    	@tmp: (100*(@maxPanes+1)/@i);
-	    	width: ~"@{tmp}%";
+			@tmp: (100*(@maxPanes+1)/@i);
+			width: ~"@{tmp}%";
 		}	
 		.while(@i+1);
 	}
 	.while(@i);
 
-  
-  #@{slider}.slideTransition {
-    -webkit-transform: translateX( (-100%/(@maxPanes+1)));
-    -webkit-transition: -webkit-transform @ANIMATION_DURATION ease;
-  }
-  
+
+	#@{slider}.slideTransition {
+		-webkit-transform: translateX( (-100%/(@maxPanes+1)));
+		-webkit-transition: -webkit-transform @ANIMATION_DURATION ease;
+	}
+
 	#@{slider}.widthTransition {
 		-webkit-transition: width @ANIMATION_DURATION ease;
 	}
+	
+	#multiPanes.overlayed.leftTransition {
+		-webkit-transition: left @ANIMATION_DURATION ease;
+		z-index: 9100;
+		border-left: solid black 1px;
+	}
+	
+	#sidePane.beforeSideSlide {
+		-webkit-transform: translateX(-100%);
+	}
+	
+	#sidePane.sideSlideTransition {
+		-webkit-transition: -webkit-transform @ANIMATION_DURATION ease;
+		-webkit-transform: translateX(0)!important;
+		z-index: 9100;
+	}
 
-  /* MediaQueries */
-  @media (max-width: 800px) and (min-width: 401px) {
-    #MQmatch{
-      width: 2px;
-    } 
-    
-    #@{slider}>.view {
-      display:none;
-    }
-  
-    #@{slider}.slideTransition > .view:nth-last-child(-n+3){
-      display:block; 
-    }
+	/* MediaQueries when multiPanes is NOT overlayed*/
+	@media (max-width: 800px) and (min-width: 401px) {
+		// Scope variables : @i
+		
+		#MQmatch {
+			width: 2px;
+		}
+		
+		#@{slider} > .view {
+			display: none;
+		}
+		
+		#@{slider}.slideTransition > .view:nth-last-child(-n+3) {
+			display: block;
+		}
+		
+		#@{slider} > .view:nth-last-child(-n+2) {
+			display: block;
+		}
+		
+		@i: 3;
+		.while (@i) when (@i =< @maxPanes) {
+			#@{slider}.col@{i} {
+				@tmp: (100*(@maxPanes+1)/2);
+				width: ~"@{tmp}%";
+			}
+			.while(@i+1);
+		}
+		.while(@i);
+	}
 
-    #@{slider} > .view:nth-last-child(-n+2){
-      display:block; 
-    }
-    
-    @i: 3;
-    .while (@i) when (@i =< @maxPanes) {
-      #@{slider}.col@{i} {
-          @tmp: (100*(@maxPanes+1)/2);
-          width: ~"@{tmp}%";
-      } 
-      .while(@i+1);
-    }
-    .while(@i);
-  }
+	@media (max-width: 400px){
+		// Scope variables : @i
+		
+		#MQmatch {
+			width: 3px;
+		}
+		
+		#@{slider} > .view {
+			display: none;
+		}
+		
+		#@{slider}.slideTransition > .view:nth-last-child(-n+2) {
+			display: block;
+		}
+		
+		#@{slider} > .view:last-child {
+			display: block;
+		}
+		
+		@i: 2;
+		.while (@i) when (@i =< @maxPanes) {
+			#@{slider}.col@{i} {
+				@tmp: (100*(@maxPanes+1)/1);
+				width: ~"@{tmp}%";
+			}
+			.while(@i+1);
+		}
+		.while(@i);
+	}
 
-  @media (max-width: 400px){
-    #MQmatch{
-      width: 3px;
-    } 
-    
-    #@{slider}>.view {
-      display:none;
-    }
+	/* MediaQueries when multiPanes is overlayed*/
+	.overlayed {
+		// Scope variables :@tmpMax
+		
+		@tmpMax: (800+@slidePaneWidth);
+		
+		@media (max-width: @tmpMax) and (min-width: 800px) {
+			// Scope variables : @i
+			
+			#MQmatch {
+				width: 2px;
+			}
+			
+			#@{slider} > .view {
+				display: none;
+			}
+			
+			#@{slider}.slideTransition > .view:nth-last-child(-n+3) {
+				display: block;
+			}
+			
+			#@{slider} > .view:nth-last-child(-n+2) {
+				display: block;
+			}
 
-    #@{slider}.slideTransition > .view:nth-last-child(-n+2){
-      display:block; 
-    }
- 
-  
-    #@{slider} > .view:last-child{
-      display:block; 
-    }
-    
-    @i: 2;
-    .while (@i) when (@i =< @maxPanes) {
-      #@{slider}.col@{i} {
-          @tmp: (100*(@maxPanes+1)/1);
-          width: ~"@{tmp}%";
-      } 
-      .while(@i+1);
-    }
-    .while(@i);
-  }
+			@i: 3;
+			.while (@i) when (@i =< @maxPanes) {
+				#@{slider}.col@{i} {
+					@tmp: (100*(@maxPanes+1)/2);
+					width: ~"@{tmp}%";
+				}
+				.while(@i+1);
+			}
+			.while(@i);
+		}
+		
+		.max(400px,@widthPartialView);
+		@media (max-width: @maxValue){
+			// Scope variables : @i
+			
+			#MQmatch {
+				width: 3px;
+			}
+			
+			#@{slider} > .view {
+				display: none;
+			}
+			
+			#@{slider}.slideTransition > .view:nth-last-child(-n+2) {
+				display: block;
+			}
+			
+			#@{slider} > .view:last-child {
+				display: block;
+			}
+			
+			@i: 2;
+			.while (@i) when (@i =< @maxPanes) {
+				#@{slider}.col@{i} {
+					@tmp: (100*(@maxPanes+1)/1);
+					width: ~"@{tmp}%";
+				}
+				.while(@i+1);
+			}
+			.while(@i);
+		}
+
+	}
+	
+	/* Mediaqueries for the portrait tablet-like sliding pane */
+	@media (min-width: 401px) and (max-width: 800px) {
+		#MQmatch{
+			height: 2px;
+		}
+		.overlayed {
+			margin-left: 0 !important;
+			left: 0 !important;
+			z-index: 0 !important;
+		}
+		#sidePane {
+			box-shadow: 0px 0px 10px 2px #000;
+		}
+	}
+
+	/* Mediaqueries for the phone-like partial sliding pane */
+	@media (max-width: @widthPartialView) {
+		.overlayed {
+			position: absolute !important;
+			right: -260px !important;
+			left: auto !important;
+		}
+		#sidePane {
+			width: auto !important;
+			right: 40px;
+			box-shadow: none;
+		}
+	}
 }
 
-
-#sidePane {
-  box-sizing: border-box;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 275px;
-  /*opacity: 0.75;*/
-  z-index: 9001;
-  display: none;
-  
-  >.view {
-    width: 100%;
-  }
-  
-}
-
-.overlayed {
-    margin-left:275px!important;
-    width: auto!important;
-    min-width: 300px;
-}
-  
-/*
-@media (min-width: 1000px) {
-  .overlayed {
-    margin-left:275px!important;
-    width: auto!important;
-  }
-  
-  #sidePane{
-    opacity: 1;
-  }
-}*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* TODO Ttable of the MQmatch div state with the corresponding meaning */
