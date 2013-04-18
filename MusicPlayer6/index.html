@@ -28,7 +28,7 @@
 			function(on, parser) {
 			
 				show = function(event, targetView){
-					on.emit(event.target,"dojoDisplay",{
+					on.emit(event.target,"dojodisplay",{
 					    bubbles: true,
 					    cancelable: true, detail: {viewId: targetView, animate: true}});
 				};
@@ -43,7 +43,7 @@
   
     </head>
  
-    <body>
+    <body style="visibility:hidden">
     	
     	<div data-dojo-type="my/ResponsiveContainer2" data-dojo-props="mainView:'view2'" id="responsiveContainer">
 	
