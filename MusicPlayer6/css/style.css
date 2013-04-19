@@ -9,6 +9,11 @@ body {
   right: 0;
   bottom: 0;
 }
+
+.mblBackground {
+  background-color: #c5ccd3;
+}
+
 #responsiveContainer {
   -webkit-perspective: 1000;
   height: 100%;
