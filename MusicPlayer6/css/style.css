@@ -1,0 +1,220 @@
+@-ms-viewport {
+  width: device-width;
+}
+html,
+body {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+#responsiveContainer {
+  -webkit-perspective: 1000;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  /* MediaQueries matching */
+
+  /* Animations */
+
+  /* generating the class needed for the transitions */
+
+  /* MediaQueries when multiPanes is NOT overlayed*/
+
+  /* MediaQueries when multiPanes is overlayed*/
+
+  /* Mediaqueries for the portrait tablet-like sliding pane */
+
+  /* Mediaqueries for the phone-like partial sliding pane */
+
+}
+#responsiveContainer .viewFrame {
+  /*Useful for transition*/
+
+  width: 25%;
+  height: 100%;
+  overflow: hidden;
+}
+#responsiveContainer .view {
+  float: left;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border-right: 1px solid black;
+  overflow: auto;
+  display: block;
+}
+#responsiveContainer > .view {
+  display: none;
+}
+#responsiveContainer #multiPanes {
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9100;
+}
+#responsiveContainer #multiPanes #slider {
+  height: 100%;
+}
+#responsiveContainer #multiPanes #slider > .view:last-child {
+  border: none;
+}
+#responsiveContainer #multiPanes.overlayed {
+  left: 275px;
+  min-width: 300px;
+}
+#responsiveContainer #sidePane {
+  box-sizing: border-box;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 275px;
+  z-index: 9001;
+  display: none;
+}
+#responsiveContainer #sidePane > .view {
+  width: 100%;
+}
+#responsiveContainer #MQmatch {
+  position: fixed;
+  top: -3000px;
+  left: -3000px;
+  width: 1px;
+  height: 1px;
+  visibility: hidden;
+}
+#responsiveContainer #slider.col1 {
+  width: 400%;
+}
+#responsiveContainer #slider.col2 {
+  width: 200%;
+}
+#responsiveContainer #slider.col3 {
+  width: 133.33333333333334%;
+}
+#responsiveContainer #slider.slideTransition {
+  -webkit-transform: translateX(-25%);
+  -webkit-transition: -webkit-transform 0.7s ease;
+}
+#responsiveContainer #slider.widthTransition {
+  -webkit-transition: width 0.7s ease;
+}
+#responsiveContainer #multiPanes.overlayed.leftTransition {
+  -webkit-transition: left 0.7s ease;
+  z-index: 9100;
+  border-left: solid black 1px;
+}
+#responsiveContainer #sidePane.beforeSideSlide {
+  -webkit-transform: translateX(-100%);
+}
+#responsiveContainer #sidePane.sideSlideTransition {
+  -webkit-transition: -webkit-transform 0.7s ease;
+  -webkit-transform: translateX(0) !important;
+  z-index: 9100;
+}
+@media (max-width: 800px) and (min-width: 401px) {
+  #responsiveContainer #MQmatch {
+    width: 2px;
+  }
+  #responsiveContainer #slider > .view {
+    display: none;
+  }
+  #responsiveContainer #slider.slideTransition > .view:nth-last-child(-n+3) {
+    display: block;
+  }
+  #responsiveContainer #slider > .view:nth-last-child(-n+2) {
+    display: block;
+  }
+  #responsiveContainer #slider.col3 {
+    width: 200%;
+  }
+}
+@media (max-width: 400px) {
+  #responsiveContainer #MQmatch {
+    width: 3px;
+  }
+  #responsiveContainer #slider > .view {
+    display: none;
+  }
+  #responsiveContainer #slider.slideTransition > .view:nth-last-child(-n+2) {
+    display: block;
+  }
+  #responsiveContainer #slider > .view:last-child {
+    display: block;
+  }
+  #responsiveContainer #slider.col2 {
+    width: 400%;
+  }
+  #responsiveContainer #slider.col3 {
+    width: 400%;
+  }
+}
+@media (max-width: 1075px) and (min-width: 800px) {
+  #responsiveContainer .overlayed #MQmatch {
+    width: 2px;
+  }
+  #responsiveContainer .overlayed #slider > .view {
+    display: none;
+  }
+  #responsiveContainer .overlayed #slider.slideTransition > .view:nth-last-child(-n+3) {
+    display: block;
+  }
+  #responsiveContainer .overlayed #slider > .view:nth-last-child(-n+2) {
+    display: block;
+  }
+  #responsiveContainer .overlayed #slider.col3 {
+    width: 200%;
+  }
+}
+@media (max-width: 400px) {
+  #responsiveContainer .overlayed #MQmatch {
+    width: 3px;
+  }
+  #responsiveContainer .overlayed #slider > .view {
+    display: none;
+  }
+  #responsiveContainer .overlayed #slider.slideTransition > .view:nth-last-child(-n+2) {
+    display: block;
+  }
+  #responsiveContainer .overlayed #slider > .view:last-child {
+    display: block;
+  }
+  #responsiveContainer .overlayed #slider.col2 {
+    width: 400%;
+  }
+  #responsiveContainer .overlayed #slider.col3 {
+    width: 400%;
+  }
+}
+@media (min-width: 401px) and (max-width: 800px) {
+  #responsiveContainer #MQmatch {
+    height: 2px;
+  }
+  #responsiveContainer .overlayed {
+    margin-left: 0 !important;
+    left: 0 !important;
+    z-index: 0 !important;
+  }
+  #responsiveContainer #sidePane {
+    box-shadow: 0px 0px 10px 2px #000;
+  }
+}
+@media (max-width: 315px) {
+  #responsiveContainer .overlayed {
+    position: absolute !important;
+    right: -260px !important;
+    left: auto !important;
+  }
+  #responsiveContainer #sidePane {
+    width: auto !important;
+    right: 40px;
+    box-shadow: none;
+  }
+}
+/* TODO Ttable of the MQmatch div state with the corresponding meaning */
