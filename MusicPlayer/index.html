@@ -7,7 +7,8 @@
         <title>Responsive Music Player</title>
 		<link href="../../DojoToolkitAptana/dojox/mobile/themes/iphone/iphone.css"
 	            rel="stylesheet"></link>
-		<link href="css/style.css" rel="stylesheet"></link>
+		<link href="css/style.less"  rel="stylesheet/less" type="text/css"></link>
+		<script src="less.js" type="text/javascript"></script>
 		<script>
 			if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
 				alert("ieMobile");
@@ -17,84 +18,68 @@
 			}
 		</script>
 		<script type="text/javascript" src="../../DojoToolkitAptana/dojo/dojo.js"
-					data-dojo-config="async: true, packages: [{ name: 'my', location: '../../responsiveDojoxApp/MusicPlayer/modules'}], parseOnLoad: false">
+					data-dojo-config="async: true, packages: [{ name: 'my', location: '../../responsiveDojoxApp/MusicPlayer6/modules'}], parseOnLoad: false">
 		</script>
 	    <script>
+			var show;
+			
 			// Load the widget parser and mobile base
-			require(["dojo/parser", "dojox/mobile","dojo/ready"],
-			function(parser) {
+			require(["dojo/on", "dojo/parser", "dojox/mobile","dojo/ready"],
+			function(on, parser) {
+			
+				show = function(event, targetView){
+					on.emit(event.target,"dojodisplay",{
+					    bubbles: true,
+					    cancelable: true, detail: {viewId: targetView, animate: true}});
+				};
+			
 				// Parse the page for widgets!
 				parser.parse();
 			});
+
+				
+				
 	    </script>  
   
     </head>
  
-    <body>
+    <body style="visibility:hidden">
     	
-    	<div data-dojo-type="my/ResponsiveContainer2" data-dojo-id="cont" data-dojo-props="mainView:'view2'" style="height:100%">
-	   <!--
-			<div id="view2" data-dojo-view class="view">
-			    <h1 data-dojo-type="dojox.mobile.Heading">Music Player</h1>
-			    <h2 data-dojo-type="dojox.mobile.RoundRectCategory">Local music</h2>
-			    <ul data-dojo-type="dojox.mobile.RoundRectList" onclick="cont.display('view1','content')">
-			        <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props="rightText:'14'">Albums</li>
-			        <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props="rightText:'5'">Artists</li>
-			        <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props="rightText:'3'">Playlists</li>
-			        <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props="rightText:'10'">Radios</li>
-			        <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props="rightText:'96'">Songs</li>
-			     </ul>
+    	<div data-dojo-type="my/ResponsiveContainer2" data-dojo-props="mainView:'view2'" id="responsiveContainer">
+	
+			<div id="view8" data-dojo-view="sidePane" >
+				<h1 class="mblHeading"><span class="mblHeadingSpanTitle">Overlay</span>
+				<div class="mblHeadingDivTitle">
+					Overlay
+				</div></h1>
+				<h2 class="mblRoundRectCategory">Infos</h2>
+				<p style="margin:15px;text-align:justify;"><span onclick="show(event, 'view9')">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span> Mauris nisi neque, imperdiet
+					 eget cursus nec, tristique a odio. Aliquam consectetur commodo ligula, sit amet posuere 
+					 augue tempus vel. Mauris varius metus odio, quis blandit odio. Cras vestibulum pharetra 
+					 sapien non consectetur. Curabitur vel fermentum turpis. Vestibulum ante ipsum primis in 
+					 faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus pretium faucibus quam 
+					 tempor consectetur. Integer ultricies tempus tortor vel sagittis.
+				</p>
 			</div>
-
-	    	<div id="view1" data-dojo-view class="view">
-			    <h1 data-dojo-type="dojox.mobile.Heading">Albums</h1>
-			    <ul data-dojo-type="dojox.mobile.RoundRectList" onclick="cont.display('view3','content')">
-					<li data-dojo-type="dojox.mobile.ListItem">Accelerate</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Around the Sun</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Automatic for the People</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Collapse into Now</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Document</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Fables of the Reconstruction</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Green</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Lifes Rich Pageant</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Monster</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Murmur</li>
-					<li data-dojo-type="dojox.mobile.ListItem">New Adventures in Hi-Fi</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Out of Time</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Reckoning</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Reveal</li>
-					<li data-dojo-type="dojox.mobile.ListItem">Up</li>				
-				</ul>
-			</div>
-		
-			<div id="view3" data-dojo-view class="view">
-				<h1 data-dojo-type="dojox.mobile.Heading">Tracks</h1>
-				    <ul data-dojo-type="dojox.mobile.RoundRectList">
-						<li data-dojo-type="dojox.mobile.ListItem">Leaving New York</li>
-						<li data-dojo-type="dojox.mobile.ListItem">Electron Blue</li>
-						<li data-dojo-type="dojox.mobile.ListItem">The Outsiders</li>
-						<li data-dojo-type="dojox.mobile.ListItem">Makes It All Okay</li>
-						<li data-dojo-type="dojox.mobile.ListItem">Final Straw</li>
-						<li data-dojo-type="dojox.mobile.ListItem">I Wanted to Be Wrong</li>
-						<li data-dojo-type="dojox.mobile.ListItem">Wanderlust</li>
-						<li data-dojo-type="dojox.mobile.ListItem">Boy in the Well</li>
-						<li data-dojo-type="dojox.mobile.ListItem">Aftermath</li>
-						<li data-dojo-type="dojox.mobile.ListItem">High Speed Train</li>
-						<li data-dojo-type="dojox.mobile.ListItem">The Worst Joke Ever</li>
-						<li data-dojo-type="dojox.mobile.ListItem">The Ascent of Man</li>
-						<li data-dojo-type="dojox.mobile.ListItem">Around the Sun</li>
-					</ul>
-			</div>
-			-->
 			
-		<div id="view2" data-dojo-view="" class="view">
+			<div id="view9" data-dojo-view="sidePane" >
+				<h1 class="mblHeading"><span class="mblHeadingSpanTitle">Overlay</span>
+				<div class="mblHeadingDivTitle">
+					Other Overlay
+				</div></h1>
+				<h2 class="mblRoundRectCategory">Cool stuff</h2>
+				<p style="margin:15px;text-align:justify;">This another view in the side pane.
+				</p>
+			</div>
+			
+			<div id="view2" data-dojo-view="multiPanes" data-dojo-depth="1">
 				<h1 class="mblHeading"><span class="mblHeadingSpanTitle">Music Player</span>
 				<div class="mblHeadingDivTitle">
 					Music Player
 				</div></h1>
 				<h2 class="mblRoundRectCategory">Local music</h2>
-				<ul onclick="cont.display('view1','content')" class="mblRoundRectList">
-					<li data-dojo-props="rightText:'14'" class="mblListItem">
+				<ul class="mblRoundRectList">
+					<li data-dojo-props="rightText:'14'" class="mblListItem" onclick="show(event, 'view1')" >
 						<div class="mblListItemRightText">
 							14
 						</div>
@@ -102,7 +87,7 @@
 							Albums
 						</div>
 					</li>
-					<li class="mblListItem">
+					<li class="mblListItem" onclick="show(event, 'view6')" >
 						<div class="mblListItemRightText">
 							5
 						</div>
@@ -110,12 +95,12 @@
 							Artists
 						</div>
 					</li>
-					<li class="mblListItem">
+					<li class="mblListItem" onclick="show(event, 'view8')">
 						<div class="mblListItemRightText">
 							3
 						</div>
 						<div class="mblListItemLabel">
-							Playlists
+							Show sliding view
 						</div>
 					</li>
 					<li class="mblListItem">
@@ -136,13 +121,14 @@
 					</li>
 				</ul>
 			</div>
-			<div id="view1" data-dojo-view="" class="view">
+			
+			<div id="view1" data-dojo-view="multiPanes" data-dojo-depth="2">
 				<h1 class="mblHeading">
 					<span class="mblHeadingSpanTitle">Albums</span>
 				<div class="mblHeadingDivTitle">
 					Albums
 				</div></h1>
-				<ul onclick="cont.display('view3','content')" class="mblRoundRectList">
+				<ul onclick="show(event, 'view3')" class="mblRoundRectList">
 					<li class="mblListItem">
 						<div class="mblListItemLabel">
 							Accelerate
@@ -250,18 +236,45 @@
 					</li>
 				</ul>
 			</div>
-			<div id="view3" data-dojo-view="" class="view">
+
+			<div id="view6" data-dojo-view="multiPanes" data-dojo-depth="2">
+				<h1 class="mblHeading">
+					<span class="mblHeadingSpanTitle">Artistes</span>
+				<div class="mblHeadingDivTitle">
+					Artistes
+				</div></h1>
+				<ul onclick="show(event, 'view3')" class="mblRoundRectList">
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							R.E.M.
+.						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Tryo
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Yeah yeah yeah
+						</div>
+					</li>
+				
+				</ul>
+			</div>
+			
+			<div id="view3" data-dojo-view="multiPanes" data-dojo-depth="3">
 				<h1 class="mblHeading"><span class="mblHeadingSpanTitle">Tracks</span>
 				<div class="mblHeadingDivTitle">
 					Tracks
 				</div></h1>
-				<ul class="mblRoundRectList">
-					<li class="mblListItem">
+				<ul class="mblRoundRectList" >
+					<li class="mblListItem"  onclick="show(event, 'view4')" >
 						<div class="mblListItemLabel">
 							Leaving New York
 						</div>
 					</li>
-					<li class="mblListItem">
+					<li class="mblListItem" onclick="show(event, 'view6')">
 						<div class="mblListItemLabel">
 							Electron Blue
 						</div>
@@ -323,6 +336,93 @@
 					</li>
 				</ul>
 			</div>
+			
+			<div id="view7" data-dojo-view="multiPanes" data-dojo-depth="3">
+				<h1 class="mblHeading"><span class="mblHeadingSpanTitle">Tracks 2</span>
+				<div class="mblHeadingDivTitle">
+					Tracks
+				</div></h1>
+				<ul class="mblRoundRectList" >
+					<li class="mblListItem"  onclick="show(event, 'view4')" >
+						<div class="mblListItemLabel">
+							Leaving New York
+						</div>
+					</li>
+					<li class="mblListItem" onclick="show(event, 'view6')">
+						<div class="mblListItemLabel">
+							Electron Blue
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							The Outsiders
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Makes It All Okay
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Final Straw
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							I Wanted to Be Wrong
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Wanderlust
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Boy in the Well
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Aftermath
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							High Speed Train
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							The Worst Joke Ever
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							The Ascent of Man
+						</div>
+					</li>
+					<li class="mblListItem">
+						<div class="mblListItemLabel">
+							Around the Sun
+						</div>
+					</li>
+				</ul>
+			</div>
+
+			<div id="view4" data-dojo-view="multiPanes" data-dojo-depth="4">
+				<h1 class="mblHeading"  onclick="show(event, 'view5')" ><span class="mblHeadingSpanTitle">deeper</span>
+				<div class="mblHeadingDivTitle">
+					deeper
+				</div></h1><p onclick="show(event, 'view6')">Re-open Artiste</p><p onclick="show(event, 'view7')">Open track 2</p></div>
+
+			<div id="view5" data-dojo-view="multiPanes" data-dojo-depth="5">
+				<h1 class="mblHeading"><span class="mblHeadingSpanTitle">evendeeper</span>
+				<div class="mblHeadingDivTitle">
+					even deeper
+				</div></h1></div>
+
     	</div>
     </body>
 </html>	

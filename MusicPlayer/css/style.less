@@ -24,12 +24,6 @@ html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
 	position: relative;
   	overflow: hidden;
   	
-	.viewFrame{  /*Useful for transition*/
-		width: (100%/(@maxPanes+1));
-		height: 100%;
-		overflow: hidden;
-	}
-	
 	.view {
 		float:left;
 		-moz-box-sizing: border-box;
@@ -37,8 +31,8 @@ html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
 		border-right: 1px solid black;
 		overflow: auto;
 		display:block;
-		
-		
+		width: (100%/(@maxPanes+1));
+		height: 100%;
 	}
 	
 	>.view{display:none;}
