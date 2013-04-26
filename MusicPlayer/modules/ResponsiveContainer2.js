@@ -9,13 +9,15 @@ define([
 	"dojo/dom-class",
 	"dojo/on",
 	"dojo/_base/lang",
-	"dojo/query"
-], function(declare, win, _Container, _WidgetBase, dom, domConstruct, domAttr, domClass, on, lang, query){
+	"dojo/query",
+	"dojo/sniff",
+	"dojox/gesture/swipe"
+], function(declare, win, _Container, _WidgetBase, dom, domConstruct, domAttr, domClass, on, lang, query, has, swipe){
 
 	// module:
 	//		my/ResponsiveContainer
 	
-	function capture(target, type, listener){
+	var capture = function(target, type, listener){
 		if(target.addEventListener){
 			target.addEventListener(type, listener, true);
 			// create and return the signal
@@ -25,13 +27,20 @@ define([
 				}
 			};
 		}
-	}		
-	
+	};	
+		
+	// Wrap node into element
+	var wrap = function(element, node){ 
+		var newNode = domConstruct.create(element);
+		node.parentNode.replaceChild(newNode,node);
+		newNode.appendChild(node);
+		return newNode;
+	};
 	
 	return declare([_WidgetBase, _Container], {
 		
 		VIEW_ATTRIBUTE_NAME: "dojo-view",
-		VIEW_JS_NAME: "dojoView",
+		DEPTH_ATTRIBUTE_NAME: "dojo-depth",
 		
 		// MultiPanes variables
 		_multiPanes: null,
@@ -41,8 +50,11 @@ define([
 		_MPdepths: ["root"], //dummy element to start the index at 1
 		
 		// SidePane 
-		_sidePane: null,
-		_SPvisible: false,
+		_sidePane: {
+			domNode: null,
+			visible: false,
+			viewId: ""
+		},
 		
 		// Transition
 		_cbMap: null,
@@ -75,7 +87,7 @@ define([
 							sideSlideTransition: {status: false, start: lang.hitch(this, this._sideSlideTransition), end: lang.hitch(this, this._sideSlideTransitionEnd)}};
 			
 			// Construct needed markup
-			this._sidePane = domConstruct.place("<div id='sidePane'></div>", this.domNode, "first");
+			this._sidePane.domNode = domConstruct.place("<div id='sidePane'></div>", this.domNode, "first");
 			this._multiPanes = domConstruct.place("<div id='multiPanes'></div>", this.domNode, "first");
 			this._MPslider = domConstruct.place("<div id='slider'></div>", this._multiPanes, "first");
 			this._MQDiv = domConstruct.place("<div id='MQmatch'></div>", this._multiPanes, "first");
@@ -85,6 +97,11 @@ define([
 			
 			// Load default
 			this.emit("dojodisplay",{bubbles: true, cancelable: true, detail: {viewId: this.mainView}});
+			console.log("ok");
+			
+			
+			/////////////////////////////////////
+			//swipe.end(this.domNode, function(e){alert(e.type+" "+e.time+" "+e.dx+" "+e.dy);})
 		},
 		
 		_getCurrentMaxPanes: function(){
@@ -102,6 +119,13 @@ define([
 			}
 		},
 		
+		_isInSidePane: function(domNode){
+			while(domNode !== null && domNode !== this._sidePane.domNode){
+				domNode = domNode.parentNode;
+			}
+			return (domNode !== null) ? true : false; 
+		},
+		
 		display: function(e){
 			var viewId = e.detail.viewId;
 			if(!viewId){return;}
@@ -109,17 +133,17 @@ define([
 			var viewDomNode = dom.byId(viewId);
 			if(!viewDomNode){return;}
 			
-			var type = viewDomNode.dataset[this.VIEW_JS_NAME]; /* String: multiPane*/
+			var type = domAttr.get(viewDomNode, "data-"+this.VIEW_ATTRIBUTE_NAME); /* String: multiPane | sidePane */
 			
 			this._clearTransition();
 			if(type === "multiPanes"){
 				//get view depth
-				var depth = parseInt(viewDomNode.dataset.dojoDepth,10);
+				var depth = parseInt(domAttr.get(viewDomNode, "data-"+this.DEPTH_ATTRIBUTE_NAME),10);
 				//get current maxPanes
 				var currentMaxPanes = this._getCurrentMaxPanes();
 				
 				//a view is already displayed at current depth so just update the view
-				if(this._MPcurrentDepth === depth && this._MPdepths[depth] !== viewId){
+				if(depth === this._MPcurrentDepth && viewId !== this._MPdepths[depth]){
 					if(animate){
 						this._startTransition(viewDomNode, "inPlaceTransition", {oldNode: dom.byId(this._MPdepths[this._MPcurrentDepth])});
 					}else{
@@ -167,31 +191,36 @@ define([
 					}
 				}
 			}else if(type === "sidePane"){
-				if(!this._SPvisible){
-					this._SPvisible = true;
-					this._sidePane.appendChild(viewDomNode);
-					this._sidePane.style.display = "block";
+				if(!this._sidePane.visible){
+					this._sidePane.visible = true;
+					this._sidePane.domNode.appendChild(viewDomNode);
+					this._sidePane.domNode.style.display = "block";
 					
 					if(animate && this._getSideTransition() === "under"){
 						this._startTransition(this._multiPanes, "leftTransition");
 					}else if(animate && this._getSideTransition() === "over"){
-						this._startTransition(this._sidePane, "sideSlideTransition");
+						this._startTransition(this._sidePane.domNode, "sideSlideTransition");
 					}
 					
 					domClass.add(this._multiPanes, "overlayed");
 	
-					var handler = capture(this._multiPanes, "click", lang.hitch(this,function(e){
-						handler.remove();
-						this._SPvisible = false;
-						this._clearTransition();
-						e.stopPropagation();
-						this._sidePane.style.display = "none";
-						domConstruct.place(this._sidePane.children[0], this.domNode, "last");
-						domClass.remove(this._multiPanes, "overlayed");
+					var handler = capture(win.body(), "click", lang.hitch(this,function(e){
+						console.log("handler ok");
+						if(!this._isInSidePane(e.target)){
+							console.log("if ok");
+							handler.remove();
+							this._sidePane.visible = false;
+							this._clearTransition();
+							e.stopPropagation();
+							this._sidePane.domNode.style.display = "none";
+							domConstruct.place(this._sidePane.domNode.children[0], this.domNode, "last");
+							domClass.remove(this._multiPanes, "overlayed");
+						}
 					}));
-				}else{
-					this._startTransition(viewDomNode, "inPlaceTransition", {oldNode: this._sidePane.children[0]});
+				}else if(viewId !== this._sidePane.viewId){
+					this._startTransition(viewDomNode, "inPlaceTransition", {oldNode: dom.byId(this._sidePane.viewId)});
 				} 
+				this._sidePane.viewId = viewId;
 				
 			}
 		},
@@ -208,7 +237,11 @@ define([
 		_startTransition: function(node, transition, option){
 			this._cbMap[transition].status = true;
 			this._cbMap[transition]._node = node;
-			this._transitionEndListener = on(node, "webkitTransitionEnd", lang.hitch(this,function(){this._endTransition(node, transition, option);}));
+			if(has("webkit")){
+				this._transitionEndListener = on(node, "webkitTransitionEnd", lang.hitch(this,function(){this._endTransition(node, transition, option);}));
+			}else{
+				this._transitionEndListener = on(node, "transitionend", lang.hitch(this,function(){this._endTransition(node, transition, option);}));
+			}
 			if(this._cbMap[transition].start){
 				this._cbMap[transition].start(node, transition, option);
 			}
@@ -222,11 +255,19 @@ define([
 			}
 		},
 		
+		_baseTransition: function(node, transition){
+			domClass.add(node, transition);
+		},
+		
+		_baseTransitionEnd: function(node, transition){
+			domClass.remove(node, transition);			
+		},
+				
 		_inPlaceTransition: function(node, transition, option){
 			var oldNode = option.oldNode;
 			var frameWidth = oldNode.offsetWidth+"px";
-			var slider = this._wrap("div", oldNode);
-			var frame = this._wrap("div", slider);
+			var slider = wrap("div", oldNode);
+			var frame = wrap("div", slider);
 			
 			slider.style.width = "200%"; 
 			slider.style.height = "100%"; 
@@ -239,8 +280,12 @@ define([
 			oldNode.style.width="50%";
 			node.style.width="50%";
 			
-			this.defer(function(){	domClass.add(oldNode, "mblSlide mblOut mblTransition");
-									domClass.add(node, "mblSlide mblOut mblTransition");});
+			domClass.add(oldNode, "mblSlide mblOut");
+			domClass.add(node, "mblSlide mblOut");
+			
+			this.defer(function(){	//console.log("defer\n");
+									domClass.add(oldNode, "mblTransition");
+									domClass.add(node, "mblTransition");}, 100);
 		},
 		
 		_inPlaceTransitionEnd: function(node, transition){
@@ -265,28 +310,12 @@ define([
 			domClass.remove(node, "beforeSideSlide");
 			domClass.remove(node, "sideSlideTransition");
 		},
-		
-		_baseTransition: function(node, transition){
-			domClass.add(node, transition);
-		},
-		
-		_baseTransitionEnd: function(node, transition){
-			domClass.remove(node, transition);			
-		},
-		
+
 		_slideTransitionEnd: function(node, transition){
 			this._baseTransitionEnd(node, transition);
 			if(this._MPslider.childNodes.length > this._MPmaxPanes){
 				domConstruct.place(query("#slider>.view:first-child")[0], this.domNode, "last"); 
 			}
-		},	
-		
-		// Wrap node into element
-		_wrap: function(element, node){ 
-			var newNode = domConstruct.create(element);
-			node.parentNode.replaceChild(newNode,node);
-			newNode.appendChild(node);
-			return newNode;
 		}
 	});
 });
