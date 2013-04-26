@@ -9,12 +9,39 @@ html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
 @slider: slider;
 @maxPanes: 3;
 @ANIMATION_DURATION: 0.7s;
+@ANIMATION_STYLE:  ease-in-out;
 @slidePaneWidth: 275px;
 @widthPartialView: (@slidePaneWidth+40); // 40 is the visible part of the view under the slide
 
 @maxValue: 0;
 .max (@a; @b) when (@a >= @b) { @maxValue: @a }
 .max (@a; @b) when (@a < @b) { @maxValue: @b }
+
+.transition() {
+	-moz-transition: all @ANIMATION_DURATION @ANIMATION_STYLE;
+	-webkit-transition: all @ANIMATION_DURATION @ANIMATION_STYLE;
+	-o-transition: all @ANIMATION_DURATION @ANIMATION_STYLE;
+	transition: all @ANIMATION_DURATION @ANIMATION_STYLE;
+}
+.transform(...) {
+	-moz-transform: @arguments;
+	-webkit-transform: @arguments;
+	-o-transform: @arguments;
+	-ms-transform: @arguments;
+	transform: @arguments;
+}
+
+.HWAcceleration(){
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	-ms-backface-visibility: hidden;
+	backface-visibility: hidden;
+
+	-webkit-perspective: 1000;
+	-moz-perspective: 1000;
+	-ms-perspective: 1000;
+	perspective: 1000;
+}
 
 #@{widget} {
 	// Scope variable : @i
@@ -33,6 +60,7 @@ html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
 		display:block;
 		width: (100%/(@maxPanes+1));
 		height: 100%;
+		.HWAcceleration();
 	}
 	
 	>.view{display:none;}
@@ -45,8 +73,10 @@ html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
 		left: 0;
 		right: 0;
 		z-index: 9100;
+		.HWAcceleration();
 		
 		#@{slider} {
+			.HWAcceleration();
 			height: 100%;
 		}
 		
@@ -71,7 +101,8 @@ html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
 		z-index: 9001;
 	
 		display: none;
-		
+
+		.HWAcceleration();		
 		.view {
 			width: 100%;
 		}
@@ -102,27 +133,27 @@ html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
 
 
 	#@{slider}.slideTransition {
-		-webkit-transform: translateX( (-100%/(@maxPanes+1)));
-		-webkit-transition: -webkit-transform @ANIMATION_DURATION ease;
+		.transform(translateX((-100%/(@maxPanes+1))));
+		.transition();
 	}
 
 	#@{slider}.widthTransition {
-		-webkit-transition: width @ANIMATION_DURATION ease;
+		.transition();
 	}
 	
 	#multiPanes.overlayed.leftTransition {
-		-webkit-transition: left @ANIMATION_DURATION ease;
+		.transition();
 		z-index: 9100;
 		border-left: solid black 1px;
 	}
 	
 	#sidePane.beforeSideSlide {
-		-webkit-transform: translateX(-100%);
+		.transform(translateX(-100%));
 	}
 	
 	#sidePane.sideSlideTransition {
-		-webkit-transition: -webkit-transform @ANIMATION_DURATION ease;
-		-webkit-transform: translateX(0)!important;
+		.transition();
+		.transform(translateX(0)) !important;
 		z-index: 9100;
 	}
 
@@ -287,3 +318,9 @@ html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
 }
 
 /* TODO Ttable of the MQmatch div state with the corresponding meaning */
+
+
+/* for version hosted on github */
+.mblBackground {
+  background-color: #c5ccd3;
+} 
