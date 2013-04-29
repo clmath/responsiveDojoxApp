@@ -5,9 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <title>Responsive Music Player</title>
+
 		<link href="/responsiveDojoxApp/mobileApp/themes/iphone/iphone.css"
 	            rel="stylesheet"></link>
-		<link href="css/style.css"  rel="stylesheet" type="text/css"></link>
+		<link href="../../module/css/ResponsiveContainer.css"  rel="stylesheet" type="text/css"></link>
+
 		<script>
 			if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
 				alert("ieMobile");
@@ -17,7 +19,7 @@
 			}
 		</script>
 		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js"
-					data-dojo-config="async: true, packages: [{ name: 'my', location: '/responsiveDojoxApp/MusicPlayer/modules'}], parseOnLoad: false">
+					data-dojo-config="async: true, packages: [{ name: 'my', location: '/responsiveDojoxApp/module'}], parseOnLoad: false">
 		</script>
 	    <script>
 			var show;
@@ -44,7 +46,7 @@
  
     <body style="visibility:hidden">
     	
-    	<div data-dojo-type="my/ResponsiveContainer2" data-dojo-props="mainView:'view2'" id="responsiveContainer">
+    	<div data-dojo-type="my/ResponsiveContainer" data-dojo-props="mainView:'view2'" id="responsiveContainer">
 	
 			<div id="view8" data-dojo-view="sidePane" >
 				<h1 class="mblHeading"><span class="mblHeadingSpanTitle">Overlay</span>
