@@ -101,7 +101,7 @@ define([
 			
 			
 			/////////////////////////////////////
-			//swipe.end(this.domNode, function(e){alert(e.type+" "+e.time+" "+e.dx+" "+e.dy);})
+			swipe.end(this.domNode, function(e){alert(e.type+" "+e.time+"ms "+e.dx+"px "+e.dy+"px");})
 		},
 		
 		_getCurrentMaxPanes: function(){
