@@ -2,9 +2,6 @@
 	width:device-width; 
 }
 
-html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
-
-
 @widget: responsiveContainer;
 @slider: slider;
 @maxPanes: 3;
@@ -13,6 +10,10 @@ html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
 @slidePaneWidth: 275px;
 @widthPartialView: (@slidePaneWidth+40); // 40 is the visible part of the view under the slide
 
+@MQBreakpoint1: 400px;
+@MQBreakpoint2: 800px;
+
+@_MQBreakpoint1P: @MQBreakpoint1+1;
 @maxValue: 0;
 .max (@a; @b) when (@a >= @b) { @maxValue: @a }
 .max (@a; @b) when (@a < @b) { @maxValue: @b }
@@ -44,12 +45,9 @@ html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
 }
 
 #@{widget} {
-	// Scope variable : @i
-	-webkit-perspective: 1000;
-	height: 100%;
-	width: 100%;
-	position: relative;
-  	overflow: hidden;
+	// Scope variable : @i,
+	position: absolute; left:0; top:0; right:0; bottom:0;
+	overflow: hidden;
   	
 	.view {
 		float:left;
@@ -158,7 +156,7 @@ html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
 	}
 
 	/* MediaQueries when multiPanes is NOT overlayed*/
-	@media (max-width: 800px) and (min-width: 401px) {
+	@media (max-width: @MQBreakpoint2) and (min-width: @_MQBreakpoint1P) {
 		// Scope variables : @i
 		
 		#MQmatch {
@@ -188,7 +186,7 @@ html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
 		.while(@i);
 	}
 
-	@media (max-width: 400px){
+	@media (max-width: @MQBreakpoint1){
 		// Scope variables : @i
 		
 		#MQmatch {
@@ -222,9 +220,9 @@ html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
 	.overlayed {
 		// Scope variables :@tmpMax
 		
-		@tmpMax: (800+@slidePaneWidth);
+		@tmpMax: (@MQBreakpoint2+@slidePaneWidth);
 		
-		@media (max-width: @tmpMax) and (min-width: 800px) {
+		@media (max-width: @tmpMax) and (min-width: @MQBreakpoint2) {
 			// Scope variables : @i
 			
 			#MQmatch {
@@ -254,7 +252,7 @@ html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
 			.while(@i);
 		}
 		
-		.max(400px,@widthPartialView);
+		.max(@MQBreakpoint1,@widthPartialView);
 		@media (max-width: @maxValue){
 			// Scope variables : @i
 			
@@ -288,7 +286,7 @@ html, body {position: absolute; left:0; top:0; right:0; bottom:0;}
 	}
 	
 	/* Mediaqueries for the portrait tablet-like sliding pane */
-	@media (min-width: 401px) and (max-width: 800px) {
+	@media (min-width: @_MQBreakpoint1P) and (max-width: @MQBreakpoint2) {
 		#MQmatch{
 			height: 2px;
 		}

@@ -1,19 +1,12 @@
 @-ms-viewport {
   width: device-width;
 }
-html,
-body {
+#responsiveContainer {
   position: absolute;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
-}
-#responsiveContainer {
-  -webkit-perspective: 1000;
-  height: 100%;
-  width: 100%;
-  position: relative;
   overflow: hidden;
   /* MediaQueries matching */
 
@@ -59,8 +52,24 @@ body {
   left: 0;
   right: 0;
   z-index: 9100;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  -ms-perspective: 1000;
+  perspective: 1000;
 }
 #responsiveContainer #multiPanes #slider {
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  -ms-perspective: 1000;
+  perspective: 1000;
   height: 100%;
 }
 #responsiveContainer #multiPanes #slider > .view:last-child {
@@ -80,6 +89,14 @@ body {
   width: 275px;
   z-index: 9001;
   display: none;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  -ms-perspective: 1000;
+  perspective: 1000;
 }
 #responsiveContainer #sidePane .view {
   width: 100%;
@@ -248,4 +265,45 @@ body {
 /* for version hosted on github */
 .mblBackground {
   background-color: #c5ccd3;
+}
+
+
+@keyframes shake{ 
+0% { transform: translateX(4px); } 
+50% { transform: translateX(-4px); }
+100% { transform: translateX(4px); }  
+} 
+
+@-moz-keyframes shake{ 
+0% { -moz-transform: translateX(4px); } 
+50% { -moz-transform: translateX(-4px); } 
+100% { -moz-transform: translateX(4px); }  
+} 
+
+@-webkit-keyframes shake { 
+0% { -webkit-transform: translateX(4px); } 
+50% { -webkit-transform: translateX(-4px); } 
+100% { -webkit-transform: translateX(4px); }  
+} 
+
+
+
+.shake{ 
+animation-name: shake; 
+animation-duration: 0.1s; 
+transform-origin:50% 50%; 
+animation-iteration-count: 3; 
+animation-timing-function: linear; 
+
+-moz-animation-name: shake; 
+-moz-animation-duration: 0.1s; 
+-moz-transform-origin:50% 50%; 
+-moz-animation-iteration-count: 3; 
+-moz-animation-timing-function: linear; 
+
+-webkit-animation-name: shake; 
+-webkit-animation-duration: 0.1s; 
+-webkit-transform-origin:50% 50%; 
+-webkit-animation-iteration-count: 3; 
+-webkit-animation-timing-function: linear; 
 }
