@@ -11,8 +11,9 @@ define([
 	"dojo/_base/lang",
 	"dojo/query",
 	"dojo/sniff",
-	"dojox/gesture/swipe"
-], function(declare, win, _Container, _WidgetBase, dom, domConstruct, domAttr, domClass, on, lang, query, has, swipe){
+	"dojo/touch"//,
+	//"dojox/gesture/swipe"
+], function(declare, win, _Container, _WidgetBase, dom, domConstruct, domAttr, domClass, on, lang, query, has, touch/*, swipe*/){
 
 	// module:
 	//		my/ResponsiveContainer
@@ -84,7 +85,8 @@ define([
 							slideTransition: {status: false, start: lang.hitch(this, this._baseTransition), end: lang.hitch(this, this._slideTransitionEnd)},
 							widthTransition: {status: false, start: lang.hitch(this, this._baseTransition), end: lang.hitch(this, this._baseTransitionEnd)},
 							leftTransition: {status: false, start: lang.hitch(this, this._baseTransition), end: lang.hitch(this, this._baseTransitionEnd)},
-							sideSlideTransition: {status: false, start: lang.hitch(this, this._sideSlideTransition), end: lang.hitch(this, this._sideSlideTransitionEnd)}};
+							sideSlideTransition: {status: false, start: lang.hitch(this, this._sideSlideTransition), end: lang.hitch(this, this._sideSlideTransitionEnd)},
+							shake: {status: false, start: lang.hitch(this, this._baseTransition), end: lang.hitch(this, this._baseTransitionEnd)}};
 			
 			// Construct needed markup
 			this._sidePane.domNode = domConstruct.place("<div id='sidePane'></div>", this.domNode, "first");
@@ -93,10 +95,10 @@ define([
 			this._MQDiv = domConstruct.place("<div id='MQmatch'></div>", this._multiPanes, "first");
 			
 			// dojoDisplay event should have a detail.view string property containing the id of the view to display
-			this.on("dojodisplay", lang.hitch(this, "display"));
+			on(win.body(), "dojodisplay", lang.hitch(this, "display"));
 			
 			// Load default
-			this.emit("dojodisplay",{bubbles: true, cancelable: true, detail: {viewId: this.mainView}});
+			this.emit("dojodisplay", {bubbles: true, cancelable: true, detail: {viewId: this.mainView}});
 			console.log("ok");
 			
 			
@@ -142,8 +144,11 @@ define([
 				//get current maxPanes
 				var currentMaxPanes = this._getCurrentMaxPanes();
 				
-				//a view is already displayed at current depth so just update the view
-				if(depth === this._MPcurrentDepth && viewId !== this._MPdepths[depth]){
+				//The view is already display so we shake it so the user can see it
+				if(depth === this._MPcurrentDepth && viewId === this._MPdepths[depth]){
+					this._startTransition(viewDomNode, "shake");
+			
+				}else if(depth === this._MPcurrentDepth && viewId !== this._MPdepths[depth]){ //a view is already displayed at current depth so just update the view
 					if(animate){
 						this._startTransition(viewDomNode, "inPlaceTransition", {oldNode: dom.byId(this._MPdepths[this._MPcurrentDepth])});
 					}else{
@@ -204,7 +209,7 @@ define([
 					
 					domClass.add(this._multiPanes, "overlayed");
 	
-					var handler = capture(win.body(), "click", lang.hitch(this,function(e){
+					var handler = capture(win.body(), "mousedown", lang.hitch(this,function(e){
 						console.log("handler ok");
 						if(!this._isInSidePane(e.target)){
 							console.log("if ok");
@@ -273,9 +278,14 @@ define([
 			slider.style.height = "100%"; 
 			slider.appendChild(node);
 			
-			frame.style.width = frameWidth;
+			
+			//frame.style.boxSizing = "border-box";
+			frame.style.width = frameWidth; 
 			frame.style.height = "100%";
 			frame.style.overflow = "hidden";
+			//frame.style.border = "solid black";
+			//frame.style.borderWidth = "0px 1px";
+			
 		
 			oldNode.style.width="50%";
 			node.style.width="50%";
@@ -283,8 +293,7 @@ define([
 			domClass.add(oldNode, "mblSlide mblOut");
 			domClass.add(node, "mblSlide mblOut");
 			
-			this.defer(function(){	//console.log("defer\n");
-									domClass.add(oldNode, "mblTransition");
+			this.defer(function(){	domClass.add(oldNode, "mblTransition");
 									domClass.add(node, "mblTransition");}, 100);
 		},
 		
