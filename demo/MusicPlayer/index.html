@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
-        <title>Responsive Music Player</title>
-		<link href="../../../DojoToolkitAptana/dojox/mobile/themes/iphone/iphone.css"
-	            rel="stylesheet"></link>
-		<link href="../../module/css/ResponsiveContainer.css"  rel="stylesheet" type="text/css"></link>
+		<title>Responsive Music Player</title>
+		<link href="../../../DojoToolkitAptana/dojox/mobile/themes/iphone/iphone.css" rel="stylesheet" />
+		<link href="../../module/css/ResponsiveContainer.css" rel="stylesheet" type="text/css" />
 		
 		<style>
 			.mblDomButtonGrayKnob{
@@ -16,6 +15,10 @@
 			}
 			.mblDomButtonGrayKnob div{
 				background-color: #fff!important;
+			}
+			#sidePane li, #sidePane ul, #sidePane, #settings, #settings2{
+				background: black;
+				color: white;
 			}
 		</style>
 		
@@ -30,7 +33,7 @@
 		<script type="text/javascript" src="../../../DojoToolkitAptana/dojo/dojo.js"
 					data-dojo-config="async: true, packages: [{ name: 'my', location: '../../responsiveDojoxApp/module'}], parseOnLoad: false">
 		</script>
-	    <script>
+	 	<script>
 			var show;
 			var showMaker;
 			
@@ -40,8 +43,8 @@
 				
 				show = function(event, targetView){
 					on.emit(event.target,"dojodisplay",{
-					    bubbles: true,
-					    cancelable: true, detail: {viewId: targetView, animate: true}});
+						bubbles: true,
+						cancelable: true, detail: {viewId: targetView, animate: true}});
 				};
 				
 				showMaker = function(targetView){
@@ -51,62 +54,33 @@
 				// Parse the page for widgets!
 				parser.parse();
 			});
+		</script>
+	</head>
 
-				
-				
-	    </script>  
-    </head>
- 
-    <body style="visibility:hidden">
-    	
-		<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Music Player"'>
-    		<span data-dojo-type="dojox/mobile/ToolBarButton" data-dojo-props="icon:'mblDomButtonGrayKnob', onClick:function(event){show(event, 'settings')}" style="float:left;" ></span>
-    	</h1>
-    	
-    	<div data-dojo-type="my/ResponsiveContainer" data-dojo-props="mainView:'main'" id="responsiveContainer" style="margin-top:42px">
-	
-			<div id="settings" data-dojo-view="sidePane" >
-				<h1 class="mblHeading"><span class="mblHeadingSpanTitle">Overlay</span>
-				<div class="mblHeadingDivTitle">
-					Overlay
-				</div></h1>
-				<h2 class="mblRoundRectCategory">Infos</h2>
-				<p style="margin:15px;text-align:justify;"><span onclick="show(event, 'view9')">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span> Mauris nisi neque, imperdiet
-					 eget cursus nec, tristique a odio. Aliquam consectetur commodo ligula, sit amet posuere 
-					 augue tempus vel. Mauris varius metus odio, quis blandit odio. Cras vestibulum pharetra 
-					 sapien non consectetur. Curabitur vel fermentum turpis. Vestibulum ante ipsum primis in 
-					 faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus pretium faucibus quam 
-					 tempor consectetur. Integer ultricies tempus tortor vel sagittis.
-				</p>
+	<body style="visibility:hidden" dojoClick>
+
+		<div data-dojo-type="my/ResponsiveContainer" data-dojo-props="mainView:'main'" id="responsiveContainer">
+			
+			<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Music Player"'>
+				<span data-dojo-type="dojox/mobile/ToolBarButton" data-dojo-props="icon:'mblDomButtonGrayKnob', onClick:function(event){show(event, 'settings')}" style="float:left;" ></span>
+			</h1>
+			
+			<div id="main" data-dojo-view="multiPanes" data-dojo-depth="1" data-dojo-type="dojox/mobile/View">
+				<h2 data-dojo-type="dojox/mobile/RoundRectCategory">Local music</h2>
+				<ul data-dojo-type="dojox/mobile/RoundRectList">
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="rightText:'14', onClick:showMaker('albums'), clickable:true">Albums</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="rightText:'5', onClick:showMaker('artists'), clickable:true">Artists</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="rightText:'0'">Playlists</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="rightText:'0'">Radios</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="rightText:'0'">Songs</li>
+				</ul>
 			</div>
 			
-			<div id="view9" data-dojo-view="sidePane" >
-				<h1 class="mblHeading"><span class="mblHeadingSpanTitle">Overlay</span>
-				<div class="mblHeadingDivTitle">
-					Other Overlay
-				</div></h1>
-				<h2 class="mblRoundRectCategory">Cool stuff</h2>
-				<p style="margin:15px;text-align:justify;" onclick="show(event, 'view8')" >This another view in the side pane.
-				</p>
-			</div>
-			
-			<div id="main" data-dojo-view="multiPanes" data-dojo-depth="1" class="view">
-			    <h2 data-dojo-type="dojox/mobile/RoundRectCategory">Local music</h2>
-			    <ul data-dojo-type="dojox/mobile/RoundRectList">
-			        <li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="rightText:'14', onClick:showMaker('albums'), clickable:true">Albums</li>
-			        <li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="rightText:'5', onClick:showMaker('artists'), clickable:true">Artists</li>
-			        <li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="rightText:'0'">Playlists</li>
-			        <li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="rightText:'0'">Radios</li>
-			        <li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="rightText:'0'">Songs</li>
-			     </ul>
-			</div>
-			
-			<div id="albums" data-dojo-view="multiPanes" data-dojo-depth="2" class="view">
+			<div id="albums" data-dojo-view="multiPanes" data-dojo-depth="2" data-dojo-type="dojox/mobile/View">
 				<h2 data-dojo-type="dojox/mobile/RoundRectCategory">Albums</h2>
-				<ul class="mblRoundRectList">
+				<ul data-dojo-type="dojox/mobile/RoundRectList">
 					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('tracks'), clickable:true">Accelerate</li>
 					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('tracks'), clickable:true">Around the Sun</li>
-					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('tracks'), clickable:true">Automatic for the</li>
 					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('tracks'), clickable:true">Collapse into Now</li>
 					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('tracks'), clickable:true">Document</li>
 					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('tracks'), clickable:true">Fables of the</li>
@@ -128,18 +102,18 @@
 				</ul>
 			</div>
 
-			<div id="artists" data-dojo-view="multiPanes" data-dojo-depth="2" class="view">
+			<div id="artists" data-dojo-view="multiPanes" data-dojo-depth="2" data-dojo-type="dojox/mobile/View">
 				<h2 data-dojo-type="dojox/mobile/RoundRectCategory">Artists</h2>
-				<ul class="mblRoundRectList" >
+				<ul data-dojo-type="dojox/mobile/RoundRectList">
 					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('tracks'), clickable:true">R.E.M.</li>
 					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('tracks'), clickable:true">Tryo</li>
 					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('tracks'), clickable:true">Yeah yeah yeah</li>	
 				</ul>
 			</div>
 			
-			<div id="tracks" data-dojo-view="multiPanes" data-dojo-depth="3" class="view">
+			<div id="tracks" data-dojo-view="multiPanes" data-dojo-depth="3" data-dojo-type="dojox/mobile/View">
 				<h2 data-dojo-type="dojox/mobile/RoundRectCategory">Tracks</h2>
-				<ul class="mblRoundRectList">
+				<ul data-dojo-type="dojox/mobile/RoundRectList">
 					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('player'), clickable:true">Leaving New York</li>
 					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('player'), clickable:true">Electron Blue</li>
 					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('player'), clickable:true">The Outsiders</li>
@@ -156,6 +130,26 @@
 				</ul>
 			</div>
 			
-    	</div>
-    </body>
+			<div id="settings" data-dojo-view="sidePane" data-dojo-type="dojox/mobile/View">
+				<ul data-dojo-type="dojox/mobile/EdgeToEdgeList">
+					<li data-dojo-type="dojox/mobile/ListItem">Search</li>
+					<li data-dojo-type="dojox/mobile/ListItem">Shuffle<div data-dojo-type="dojox/mobile/Switch" value="off" leftLabel="On" rightLabel="Off"></div></li>
+					<li data-dojo-type="dojox/mobile/ListItem">Equalizer<div data-dojo-type="dojox/mobile/Switch" value="off" leftLabel="On" rightLabel="Off"></div></li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('settings2'), clickable:true">Settings</li>	
+				</ul>
+			</div>
+			
+			<div id="settings2" data-dojo-view="sidePane" data-dojo-type="dojox/mobile/View">
+				<ul data-dojo-type="dojox/mobile/EdgeToEdgeList">
+					<li data-dojo-type="dojox/mobile/ListItem">Settings 1</li>
+					<li data-dojo-type="dojox/mobile/ListItem">Settings 2</li>
+					<li data-dojo-type="dojox/mobile/ListItem">Settings 3</li>
+					<li data-dojo-type="dojox/mobile/ListItem">Settings 4</li>
+					<li data-dojo-type="dojox/mobile/ListItem">Settings 5</li>
+					<li data-dojo-type="dojox/mobile/ListItem">Settings 6</li>
+				</ul>
+			</div>
+			
+		</div>
+ 	</body>
 </html>	

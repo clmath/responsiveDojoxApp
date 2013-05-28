@@ -16,7 +16,7 @@
 
   /* MediaQueries when multiPanes is NOT overlayed*/
 
-  /* MediaQueries when multiPanes is overlayed*/
+  /* MediaQueries when multiPanes IS overlayed*/
 
   /* Mediaqueries for the portrait tablet-like sliding pane */
 
@@ -45,12 +45,12 @@
   display: none;
 }
 #responsiveContainer #multiPanes {
-  height: 100%;
   overflow: hidden;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
+  bottom: 0;
   z-index: 9100;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
@@ -70,21 +70,27 @@
   -moz-perspective: 1000;
   -ms-perspective: 1000;
   perspective: 1000;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   height: 100%;
 }
 #responsiveContainer #multiPanes #slider > .view:last-child {
   border: none;
 }
 #responsiveContainer #multiPanes.overlayed {
-  left: 275px;
   min-width: 300px;
+}
+#responsiveContainer #multiPanes.overlayed.left {
+  left: 275px;
+}
+#responsiveContainer #multiPanes.overlayed.right {
+  right: 275px;
 }
 #responsiveContainer #sidePane {
   box-sizing: border-box;
   height: 100%;
   position: absolute;
   top: 0;
-  left: 0;
   bottom: 0;
   width: 275px;
   z-index: 9001;
@@ -100,6 +106,12 @@
 }
 #responsiveContainer #sidePane .view {
   width: 100%;
+}
+#responsiveContainer #sidePane.left {
+  left: 0;
+}
+#responsiveContainer #sidePane.right {
+  right: 0;
 }
 #responsiveContainer #MQmatch {
   position: fixed;
@@ -135,20 +147,32 @@
   -o-transition: all 0.7s ease-in-out;
   transition: all 0.7s ease-in-out;
 }
-#responsiveContainer #multiPanes.overlayed.leftTransition {
+#responsiveContainer #multiPanes.overlayed.sideTransition {
   -moz-transition: all 0.7s ease-in-out;
   -webkit-transition: all 0.7s ease-in-out;
   -o-transition: all 0.7s ease-in-out;
   transition: all 0.7s ease-in-out;
   z-index: 9100;
+}
+#responsiveContainer #multiPanes.overlayed.sideTransition.left {
   border-left: solid black 1px;
 }
-#responsiveContainer #sidePane.beforeSideSlide {
+#responsiveContainer #multiPanes.overlayed.sideTransition.left {
+  border-right: solid black 1px;
+}
+#responsiveContainer #sidePane.beforeSideSlide.left {
   -moz-transform: translateX(-100%);
   -webkit-transform: translateX(-100%);
   -o-transform: translateX(-100%);
   -ms-transform: translateX(-100%);
   transform: translateX(-100%);
+}
+#responsiveContainer #sidePane.beforeSideSlide.right {
+  -moz-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  -o-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  transform: translateX(100%);
 }
 #responsiveContainer #sidePane.sideSlideTransition {
   -moz-transition: all 0.7s ease-in-out;
@@ -240,25 +264,50 @@
   #responsiveContainer #MQmatch {
     height: 2px;
   }
-  #responsiveContainer .overlayed {
+  #responsiveContainer #multiPanes.overlayed {
+    z-index: 0 !important;
+  }
+  #responsiveContainer #multiPanes.overlayed.left {
     margin-left: 0 !important;
     left: 0 !important;
-    z-index: 0 !important;
+  }
+  #responsiveContainer #multiPanes.overlayed.right {
+    margin-right: 0 !important;
+    right: 0 !important;
   }
   #responsiveContainer #sidePane {
     box-shadow: 0px 0px 10px 2px #000;
   }
 }
+@media (min-width: 315px) and (max-width: 400px) {
+  #responsiveContainer #multiPanes.overlayed.left {
+    right: -275px !important;
+  }
+  #responsiveContainer #multiPanes.overlayed.right {
+    left: -275px !important;
+  }
+}
 @media (max-width: 315px) {
-  #responsiveContainer .overlayed {
+  #responsiveContainer #multiPanes.overlayed {
     position: absolute !important;
+  }
+  #responsiveContainer #multiPanes.overlayed.left {
     right: -260px !important;
     left: auto !important;
   }
+  #responsiveContainer #multiPanes.overlayed.right {
+    left: -260px !important;
+    right: auto !important;
+  }
   #responsiveContainer #sidePane {
     width: auto !important;
-    right: 40px;
     box-shadow: none;
+  }
+  #responsiveContainer #sidePane.left {
+    right: 40px;
+  }
+  #responsiveContainer #sidePane.right {
+    left: 40px;
   }
 }
 /* TODO Ttable of the MQmatch div state with the corresponding meaning */
@@ -266,6 +315,9 @@
 .mblBackground {
   background-color: #c5ccd3;
 }
+
+
+
 
 
 @keyframes shake{ 
@@ -285,8 +337,6 @@
 50% { -webkit-transform: translateX(-4px); } 
 100% { -webkit-transform: translateX(4px); }  
 } 
-
-
 
 .shake{ 
 animation-name: shake; 

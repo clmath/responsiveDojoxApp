@@ -18,6 +18,10 @@
 .max (@a; @b) when (@a >= @b) { @maxValue: @a }
 .max (@a; @b) when (@a < @b) { @maxValue: @b }
 
+.borderBox() {
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
 .transition() {
 	-moz-transition: all @ANIMATION_DURATION @ANIMATION_STYLE;
 	-webkit-transition: all @ANIMATION_DURATION @ANIMATION_STYLE;
@@ -31,7 +35,6 @@
 	-ms-transform: @arguments;
 	transform: @arguments;
 }
-
 .HWAcceleration(){
 	-webkit-backface-visibility: hidden;
 	-moz-backface-visibility: hidden;
@@ -51,8 +54,7 @@
   	
 	.view {
 		float:left;
-		-moz-box-sizing: border-box;
-		box-sizing: border-box;
+		.borderBox();
 		border-right: 1px solid black;
 		overflow: auto;
 		display:block;
@@ -64,17 +66,18 @@
 	>.view{display:none;}
 	
 	#multiPanes {
-		height: 100%;
 		overflow:hidden;
 		position: absolute;
 		top: 0;
 		left: 0;
 		right: 0;
+		bottom: 0;
 		z-index: 9100;
 		.HWAcceleration();
 		
 		#@{slider} {
 			.HWAcceleration();
+			.borderBox();
 			height: 100%;
 		}
 		
@@ -83,8 +86,15 @@
 		}
 		
 		&.overlayed {
-			left: @slidePaneWidth;
 			min-width: 300px;
+		}
+		
+		&.overlayed.left {
+			left: @slidePaneWidth;
+		}
+		
+		&.overlayed.right {
+			right: @slidePaneWidth;
 		}	
 	}
 	
@@ -93,7 +103,6 @@
 		height: 100%;
 		position: absolute;
 		top: 0;
-		left: 0;
 		bottom: 0;
 		width: @slidePaneWidth;
 		z-index: 9001;
@@ -104,6 +113,12 @@
 		.view {
 			width: 100%;
 		}
+	}
+	#sidePane.left{
+		left: 0;
+	}
+	#sidePane.right{
+		right: 0;
 	}
 	
 	/* MediaQueries matching */
@@ -139,14 +154,25 @@
 		.transition();
 	}
 	
-	#multiPanes.overlayed.leftTransition {
+	#multiPanes.overlayed.sideTransition {
 		.transition();
 		z-index: 9100;
+	}
+
+	#multiPanes.overlayed.sideTransition.left {
 		border-left: solid black 1px;
 	}
 	
-	#sidePane.beforeSideSlide {
+	#multiPanes.overlayed.sideTransition.left {
+		border-right: solid black 1px;
+	}
+
+
+	#sidePane.beforeSideSlide.left {
 		.transform(translateX(-100%));
+	}
+	#sidePane.beforeSideSlide.right {
+		.transform(translateX(100%));
 	}
 	
 	#sidePane.sideSlideTransition {
@@ -216,7 +242,7 @@
 		.while(@i);
 	}
 
-	/* MediaQueries when multiPanes is overlayed*/
+	/* MediaQueries when multiPanes IS overlayed*/
 	.overlayed {
 		// Scope variables :@tmpMax
 		
@@ -290,27 +316,62 @@
 		#MQmatch{
 			height: 2px;
 		}
-		.overlayed {
-			margin-left: 0 !important;
-			left: 0 !important;
+
+		#multiPanes.overlayed {
 			z-index: 0 !important;
 		}
+
+		#multiPanes.overlayed.left {
+			margin-left: 0 !important;
+			left: 0 !important;
+		}
+
+		#multiPanes.overlayed.right {
+			margin-right: 0 !important;
+			right: 0 !important;
+		}
+
 		#sidePane {
 			box-shadow: 0px 0px 10px 2px #000;
 		}
 	}
 
+/* Mediaqueries for the portrait tablet-like sliding pane */
+	@media (min-width: @widthPartialView) and (max-width: @MQBreakpoint1) {
+		#multiPanes.overlayed.left {
+			right: -275px!important;
+		}
+
+		#multiPanes.overlayed.right {
+			left: -275px!important;
+		}
+	}
+
 	/* Mediaqueries for the phone-like partial sliding pane */
 	@media (max-width: @widthPartialView) {
-		.overlayed {
+		#multiPanes.overlayed {
 			position: absolute !important;
+		}
+
+		#multiPanes.overlayed.left {
 			right: -260px !important;
 			left: auto !important;
 		}
+
+		#multiPanes.overlayed.right {
+			left: -260px !important;
+			right: auto !important;
+		}
+
 		#sidePane {
 			width: auto !important;
-			right: 40px;
 			box-shadow: none;
+		}
+		#sidePane.left {
+			right: 40px;
+		}
+		#sidePane.right {
+			left: 40px;
 		}
 	}
 }
