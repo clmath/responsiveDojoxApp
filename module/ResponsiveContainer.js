@@ -11,9 +11,9 @@ define([
 	"dojo/_base/lang",
 	"dojo/query",
 	"dojo/sniff",
-	"dojo/touch"//,
+	"dojox/mobile/viewRegistry"//, To hack views
 	//"dojox/gesture/swipe"
-], function(declare, win, _Container, _WidgetBase, dom, domConstruct, domAttr, domClass, on, lang, query, has, touch/*, swipe*/){
+], function(declare, win, _Container, _WidgetBase, dom, domConstruct, domAttr, domClass, on, lang, query, has, vreg/*, swipe*/){
 
 	// module:
 	//		my/ResponsiveContainer
@@ -45,6 +45,7 @@ define([
 		
 		// MultiPanes variables
 		_multiPanes: null,
+		_MPheader: null,
 		_MPslider: null,
 		_MPmaxPanes: 3,
 		_MPcurrentDepth: 0,
@@ -59,7 +60,6 @@ define([
 		
 		// Transition
 		_cbMap: null,
-		_transitionEndListener: null,
 		
 		// Media Queries
 		_MQDiv: null, // Workaround for window.matchMedia
@@ -71,20 +71,22 @@ define([
 			this.inherited(arguments);
 				
 			// Applying the view class on the views
-			var children = this.domNode.childNodes;
+			var children = this.domNode.children;
 			var i;
 			for(i=0; i < children.length; i++){
 				if(domAttr.has(children[i], "data-"+this.VIEW_ATTRIBUTE_NAME)){
 					domClass.add(children[i], "view");
 					domClass.add(children[i], "mblBackground");
-				} 
+				}else if(children[i].nodeName === "H1"){
+					this._MPheader = children[i];
+				}
 			}
 			
 			// Setting up the callback map
 			this._cbMap = {inPlaceTransition: {status: false, start: lang.hitch(this, this._inPlaceTransition), end: lang.hitch(this, this._inPlaceTransitionEnd)}, //status = true while there is an ongoing transition 
 							slideTransition: {status: false, start: lang.hitch(this, this._baseTransition), end: lang.hitch(this, this._slideTransitionEnd)},
 							widthTransition: {status: false, start: lang.hitch(this, this._baseTransition), end: lang.hitch(this, this._baseTransitionEnd)},
-							leftTransition: {status: false, start: lang.hitch(this, this._baseTransition), end: lang.hitch(this, this._baseTransitionEnd)},
+							sideTransition: {status: false, start: lang.hitch(this, this._baseTransition), end: lang.hitch(this, this._baseTransitionEnd)},
 							sideSlideTransition: {status: false, start: lang.hitch(this, this._sideSlideTransition), end: lang.hitch(this, this._sideSlideTransitionEnd)},
 							shake: {status: false, start: lang.hitch(this, this._baseTransition), end: lang.hitch(this, this._baseTransitionEnd)}};
 			
@@ -93,6 +95,12 @@ define([
 			this._multiPanes = domConstruct.place("<div id='multiPanes'></div>", this.domNode, "first");
 			this._MPslider = domConstruct.place("<div id='slider'></div>", this._multiPanes, "first");
 			this._MQDiv = domConstruct.place("<div id='MQmatch'></div>", this._multiPanes, "first");
+
+			if(this._MPheader){
+				domConstruct.place(this._MPheader, this._multiPanes, "first");
+				this._MPslider.style.marginTop="-"+this._MPheader.offsetHeight+"px";
+				this._MPslider.style.paddingTop=""+this._MPheader.offsetHeight+"px";
+			}
 			
 			// dojoDisplay event should have a detail.view string property containing the id of the view to display
 			on(win.body(), "dojodisplay", lang.hitch(this, "display"));
@@ -122,8 +130,8 @@ define([
 		},
 		
 		_isInSidePane: function(domNode){
-			while(domNode !== null && domNode !== this._sidePane.domNode){
-				domNode = domNode.parentNode;
+			while(domNode !== null && domNode !== undefined && domNode !== this._sidePane.domNode){
+				domNode = domNode.parentNode;	
 			}
 			return (domNode !== null) ? true : false; 
 		},
@@ -134,6 +142,12 @@ define([
 			var animate = e.detail.animate || false;
 			var viewDomNode = dom.byId(viewId);
 			if(!viewDomNode){return;}
+			
+			//to hack the view widget startup display: none and the event handler
+			viewDomNode.style.display = "";
+			vreg.getEnclosingView(viewDomNode)._transEndHandle.remove();
+			vreg.getEnclosingView(viewDomNode)._animEndHandle.remove();
+			vreg.getEnclosingView(viewDomNode)._animStartHandle.remove();
 			
 			var type = domAttr.get(viewDomNode, "data-"+this.VIEW_ATTRIBUTE_NAME); /* String: multiPane | sidePane */
 			
@@ -202,31 +216,33 @@ define([
 					this._sidePane.domNode.style.display = "block";
 					
 					if(animate && this._getSideTransition() === "under"){
-						this._startTransition(this._multiPanes, "leftTransition");
+						this._startTransition(this._multiPanes, "sideTransition");
 					}else if(animate && this._getSideTransition() === "over"){
 						this._startTransition(this._sidePane.domNode, "sideSlideTransition");
 					}
 					
-					domClass.add(this._multiPanes, "overlayed");
-	
-					var handler = capture(win.body(), "mousedown", lang.hitch(this,function(e){
-						console.log("handler ok");
-						if(!this._isInSidePane(e.target)){
-							console.log("if ok");
-							handler.remove();
-							this._sidePane.visible = false;
-							this._clearTransition();
-							e.stopPropagation();
-							this._sidePane.domNode.style.display = "none";
-							domConstruct.place(this._sidePane.domNode.children[0], this.domNode, "last");
-							domClass.remove(this._multiPanes, "overlayed");
-						}
-					}));
+					domClass.add(this._sidePane.domNode, "left");
+					domClass.add(this._multiPanes, "overlayed left");
+					
+					var eventName = has("touch") ? "touchstart" : "mousedown"; //Those are the event used by dojo so we have to use them if we went to prevent the default action
+					var handler = capture(win.body(), eventName, lang.hitch(this, function(event){this._hideSidePane(event, handler);}));
+					
 				}else if(viewId !== this._sidePane.viewId){
 					this._startTransition(viewDomNode, "inPlaceTransition", {oldNode: dom.byId(this._sidePane.viewId)});
 				} 
 				this._sidePane.viewId = viewId;
-				
+			}
+		},
+		
+		_hideSidePane: function(e, handler){
+			if(!this._isInSidePane(e.target||e.srcElement)){
+				handler.remove();
+				this._clearTransition();
+				this._sidePane.visible = false;
+				e.stopPropagation();
+				this._sidePane.domNode.style.display = "none";
+				domConstruct.place(this._sidePane.domNode.children[0], this.domNode, "last");
+				domClass.remove(this._multiPanes, "overlayed");
 			}
 		},
 		
@@ -240,30 +256,28 @@ define([
 		},
 
 		_startTransition: function(node, transition, option){
+			var eventName;
+			eventName = has("webkit") ? "webkitTransitionEnd" : "transitionend";
+
 			this._cbMap[transition].status = true;
 			this._cbMap[transition]._node = node;
-			if(has("webkit")){
-				this._transitionEndListener = on(node, "webkitTransitionEnd", lang.hitch(this,function(){this._endTransition(node, transition, option);}));
-			}else{
-				this._transitionEndListener = on(node, "transitionend", lang.hitch(this,function(){this._endTransition(node, transition, option);}));
-			}
+			on.once(node, eventName, lang.hitch(this,function(event){this._endTransition(node, transition, option);}));
 			if(this._cbMap[transition].start){
 				this._cbMap[transition].start(node, transition, option);
 			}
 		},
-		
+
 		_endTransition: function(node, transition, option){
 			this._cbMap[transition].status = false;
-			this._transitionEndListener.remove();
 			if(this._cbMap[transition].end){
 				this._cbMap[transition].end(node, transition, option);
 			}
 		},
-		
+
 		_baseTransition: function(node, transition){
 			domClass.add(node, transition);
 		},
-		
+
 		_baseTransitionEnd: function(node, transition){
 			domClass.remove(node, transition);			
 		},
@@ -299,7 +313,7 @@ define([
 		
 		_inPlaceTransitionEnd: function(node, transition){
 			var i;
-			var children = node.parentNode.childNodes;
+			var children = node.parentNode.children;
 			var parent = node.parentNode.parentNode;
 			if(children.length != 2){console.log("In place transition run into an unexpected error"); return;}
 			for(i = 0; i < 2; i++){
@@ -322,7 +336,7 @@ define([
 
 		_slideTransitionEnd: function(node, transition){
 			this._baseTransitionEnd(node, transition);
-			if(this._MPslider.childNodes.length > this._MPmaxPanes){
+			if(this._MPslider.children.length > this._MPmaxPanes){
 				domConstruct.place(query("#slider>.view:first-child")[0], this.domNode, "last"); 
 			}
 		}
