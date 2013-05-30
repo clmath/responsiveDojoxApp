@@ -16,9 +16,12 @@
 			.mblDomButtonGrayKnob div{
 				background-color: #fff!important;
 			}
-			#sidePane li, #sidePane ul, #sidePane, #settings, #settings2{
+			#sidePane li, #sidePane ul, #sidePane, #settings, #settings2, #playing{
 				background: black;
 				color: white;
+			}
+			#sidePane .mblSwitchBg {
+				border: none;
 			}
 		</style>
 		<script>
@@ -61,7 +64,10 @@
 		<div data-dojo-type="my/ResponsiveContainer" data-dojo-props="mainView:'main'" id="responsiveContainer">
 			
 			<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Music Player"'>
-				<span data-dojo-type="dojox/mobile/ToolBarButton" data-dojo-props="icon:'mblDomButtonGrayKnob', onClick:function(event){show(event, 'settings')}" style="float:left;" ></span>
+				<span data-dojo-type="dojox/mobile/ToolBarButton" data-dojo-props="icon:'mblDomButtonGrayKnob', onClick:function(event){show(event, 'settings')}" style="float:left;" ></span> 
+				<span data-dojo-type="dojox/mobile/ToolBarButton" data-dojo-props="onClick:function(event){show(event, 'playing')}" style="float:right;" >
+					<img src="../../module/css/cd_low.png" style="max-height: 90%;margin-top:5%;"/>
+				</span>
 			</h1>
 			
 			<div id="main" data-dojo-view="multiPanes" data-dojo-depth="1" data-dojo-type="dojox/mobile/View">
@@ -113,19 +119,19 @@
 			<div id="tracks" data-dojo-view="multiPanes" data-dojo-depth="3" data-dojo-type="dojox/mobile/View">
 				<h2 data-dojo-type="dojox/mobile/RoundRectCategory">Tracks</h2>
 				<ul data-dojo-type="dojox/mobile/RoundRectList">
-					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('player'), clickable:true">Leaving New York</li>
-					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('player'), clickable:true">Electron Blue</li>
-					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('player'), clickable:true">The Outsiders</li>
-					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('player'), clickable:true">Makes It All Okay</li>
-					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('player'), clickable:true">Final Straw</li>
-					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('player'), clickable:true">I Wanted to Be Wrong</li>
-					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('player'), clickable:true">Wanderlust</li>
-					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('player'), clickable:true">Boy in the Well</li>
-					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('player'), clickable:true">Aftermath</li>
-					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('player'), clickable:true">High Speed Train</li>
-					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('player'), clickable:true">The Worst Joke Ever</li>
-					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('player'), clickable:true">The Ascent of Man</li>
-					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('player'), clickable:true">Around the Sun</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('playing'), clickable:true">Leaving New York</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('playing'), clickable:true">Electron Blue</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('playing'), clickable:true">The Outsiders</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('playing'), clickable:true">Makes It All Okay</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('playing'), clickable:true">Final Straw</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('playing'), clickable:true">I Wanted to Be Wrong</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('playing'), clickable:true">Wanderlust</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('playing'), clickable:true">Boy in the Well</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('playing'), clickable:true">Aftermath</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('playing'), clickable:true">High Speed Train</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('playing'), clickable:true">The Worst Joke Ever</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('playing'), clickable:true">The Ascent of Man</li>
+					<li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="onClick:showMaker('playing'), clickable:true">Around the Sun</li>
 				</ul>
 			</div>
 			
@@ -138,7 +144,7 @@
 				</ul>
 			</div>
 			
-			<div id="settings2" data-dojo-view="sidePane" data-dojo-type="dojox/mobile/View">
+			<div id="settings2" data-dojo-view="sidePane left" data-dojo-type="dojox/mobile/View">
 				<ul data-dojo-type="dojox/mobile/EdgeToEdgeList">
 					<li data-dojo-type="dojox/mobile/ListItem">Settings 1</li>
 					<li data-dojo-type="dojox/mobile/ListItem">Settings 2</li>
@@ -149,6 +155,10 @@
 				</ul>
 			</div>
 			
+			<div id="playing" data-dojo-view="sidePane right" data-dojo-type="dojox/mobile/View">
+				<p><img src="../../module/css/cd.png" style="max-width: 80%; margin-left: 10%;" /></p>
+				<p style="text-align: center;">Now playing : Track1.mp3</p>
+			</div>
 		</div>
  	</body>
 </html>	

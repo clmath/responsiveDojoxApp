@@ -55,6 +55,7 @@ define([
 		_sidePane: {
 			domNode: null,
 			visible: false,
+			side: "", // Meaningful iff visible === true
 			viewId: ""
 		},
 		
@@ -149,10 +150,10 @@ define([
 			vreg.getEnclosingView(viewDomNode)._animEndHandle.remove();
 			vreg.getEnclosingView(viewDomNode)._animStartHandle.remove();
 			
-			var type = domAttr.get(viewDomNode, "data-"+this.VIEW_ATTRIBUTE_NAME); /* String: multiPane | sidePane */
+			var type = domAttr.get(viewDomNode, "data-"+this.VIEW_ATTRIBUTE_NAME).split(" "); /* String: multiPane | sidePane left | sidePane right*/
 			
 			this._clearTransition();
-			if(type === "multiPanes"){
+			if(type[0] === "multiPanes"){
 				//get view depth
 				var depth = parseInt(domAttr.get(viewDomNode, "data-"+this.DEPTH_ATTRIBUTE_NAME),10);
 				//get current maxPanes
@@ -209,7 +210,8 @@ define([
 						domClass.remove(this._MPslider, "col"+i);
 					}
 				}
-			}else if(type === "sidePane"){
+			}else if(type[0] === "sidePane"){
+				var side = type[1] || "left";
 				if(!this._sidePane.visible){
 					this._sidePane.visible = true;
 					this._sidePane.domNode.appendChild(viewDomNode);
@@ -221,29 +223,35 @@ define([
 						this._startTransition(this._sidePane.domNode, "sideSlideTransition");
 					}
 					
-					domClass.add(this._sidePane.domNode, "left");
-					domClass.add(this._multiPanes, "overlayed left");
+					domClass.add(this._sidePane.domNode, side);
+					domClass.add(this._multiPanes, "overlayed "+side);
 					
 					var eventName = has("touch") ? "touchstart" : "mousedown"; //Those are the event used by dojo so we have to use them if we went to prevent the default action
-					var handler = capture(win.body(), eventName, lang.hitch(this, function(event){this._hideSidePane(event, handler);}));
+					var handler = capture(win.body(), eventName, lang.hitch(this, function(event){
+																					if(!this._isInSidePane(event.target||event.srcElement)){
+																						event.stopPropagation();
+																						handler.remove();
+																						this._hideSidePane();
+																					}}));
 					
-				}else if(viewId !== this._sidePane.viewId){
+				}else if(this._sidePane.side !== side){ // we need to open the overlay on the other side
+					this._hideSidePane();
+					this.emit("dojodisplay", {bubbles: true, cancelable: true, detail: {viewId: viewId}});
+				}else if(viewId !== this._sidePane.viewId){ //sidePane.visible === true
 					this._startTransition(viewDomNode, "inPlaceTransition", {oldNode: dom.byId(this._sidePane.viewId)});
 				} 
 				this._sidePane.viewId = viewId;
+				this._sidePane.side = side;
 			}
 		},
 		
-		_hideSidePane: function(e, handler){
-			if(!this._isInSidePane(e.target||e.srcElement)){
-				handler.remove();
-				this._clearTransition();
-				this._sidePane.visible = false;
-				e.stopPropagation();
-				this._sidePane.domNode.style.display = "none";
-				domConstruct.place(this._sidePane.domNode.children[0], this.domNode, "last");
-				domClass.remove(this._multiPanes, "overlayed");
-			}
+		_hideSidePane: function(){
+			this._clearTransition();
+			this._sidePane.visible = false;
+			this._sidePane.domNode.style.display = "none";
+			domClass.remove(this._sidePane.domNode, this._sidePane.side);
+			domClass.remove(this._multiPanes, "overlayed "+this._sidePane.side);
+			domConstruct.place(this._sidePane.domNode.children[0], this.domNode, "last");
 		},
 		
 		_clearTransition: function(){
@@ -289,7 +297,8 @@ define([
 			var frame = wrap("div", slider);
 			
 			slider.style.width = "200%"; 
-			slider.style.height = "100%"; 
+			slider.style.height = "100%";
+			domClass.add(slider,"tmpPrivateDiv"); // Mark the div to remove it and not another one
 			slider.appendChild(node);
 			
 			
@@ -297,6 +306,7 @@ define([
 			frame.style.width = frameWidth; 
 			frame.style.height = "100%";
 			frame.style.overflow = "hidden";
+			domClass.add(frame, "tmpPrivateDiv"); // Mark the div to remove it and not another one
 			//frame.style.border = "solid black";
 			//frame.style.borderWidth = "0px 1px";
 			
@@ -315,14 +325,17 @@ define([
 			var i;
 			var children = node.parentNode.children;
 			var parent = node.parentNode.parentNode;
-			if(children.length != 2){console.log("In place transition run into an unexpected error"); return;}
+			if(children.length != 2 || !(domClass.contains(node.parentNode, "tmpPrivateDiv")) || !(domClass.contains(parent, "tmpPrivateDiv"))){
+				console.log("In place transition run into an unexpected error");
+				return;
+			}
 			for(i = 0; i < 2; i++){
 				domClass.remove(children[i], "mblSlide mblOut mblTransition");
 				children[i].style.removeProperty("width");
 			}
 			domConstruct.place(children[0], this.domNode, "last"); 
 			parent.parentNode.replaceChild(children[0], parent); //still index 0 because children is a dynamic list 
-		}, 
+		},
 		
 		_sideSlideTransition: function(node, transition){
 			domClass.add(node, "beforeSideSlide");
