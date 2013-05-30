@@ -16,9 +16,12 @@
 			.mblDomButtonGrayKnob div{
 				background-color: #fff!important;
 			}
-			#sidePane li, #sidePane ul, #sidePane, #settings, #settings2{
+			#sidePane li, #sidePane ul, #sidePane, #settings, #settings2, #playing{
 				background: black;
 				color: white;
+			}
+			#sidePane .mblSwitchBg {
+				border: none;
 			}
 		</style>
 		
@@ -62,7 +65,10 @@
 		<div data-dojo-type="my/ResponsiveContainer" data-dojo-props="mainView:'main'" id="responsiveContainer">
 			
 			<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Music Player"'>
-				<span data-dojo-type="dojox/mobile/ToolBarButton" data-dojo-props="icon:'mblDomButtonGrayKnob', onClick:function(event){show(event, 'settings')}" style="float:left;" ></span>
+				<span data-dojo-type="dojox/mobile/ToolBarButton" data-dojo-props="icon:'mblDomButtonGrayKnob', onClick:function(event){show(event, 'settings')}" style="float:left;" ></span> 
+				<span data-dojo-type="dojox/mobile/ToolBarButton" data-dojo-props="onClick:function(event){show(event, 'playing')}" style="float:right;" >
+					<img src="../../module/css/cd_low.png" style="max-height: 90%;margin-top:5%;"/>
+				</span>
 			</h1>
 			
 			<div id="main" data-dojo-view="multiPanes" data-dojo-depth="1" data-dojo-type="dojox/mobile/View">
@@ -139,7 +145,7 @@
 				</ul>
 			</div>
 			
-			<div id="settings2" data-dojo-view="sidePane" data-dojo-type="dojox/mobile/View">
+			<div id="settings2" data-dojo-view="sidePane left" data-dojo-type="dojox/mobile/View">
 				<ul data-dojo-type="dojox/mobile/EdgeToEdgeList">
 					<li data-dojo-type="dojox/mobile/ListItem">Settings 1</li>
 					<li data-dojo-type="dojox/mobile/ListItem">Settings 2</li>
@@ -150,6 +156,10 @@
 				</ul>
 			</div>
 			
+			<div id="playing" data-dojo-view="sidePane right" data-dojo-type="dojox/mobile/View">
+				<p><img src="../../module/css/cd.png" style="max-width: 80%; margin-left: 10%;" /></p>
+				<p style="text-align: center;">Now playing : Track1.mp3</p>
+			</div>
 		</div>
  	</body>
 </html>	
