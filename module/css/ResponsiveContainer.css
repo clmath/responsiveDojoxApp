@@ -41,6 +41,12 @@
   -ms-perspective: 1000;
   perspective: 1000;
 }
+#responsiveContainer .backButton {
+  visibility: hidden;
+}
+#responsiveContainer .backButton.moreThanMaxPanes {
+  visibility: visible!important;
+}
 #responsiveContainer > .view {
   display: none;
 }
@@ -186,7 +192,11 @@
   transform: translateX(0) !important;
   z-index: 9100;
 }
-@media (max-width: 800px) and (min-width: 401px) {
+@media (max-width: 800px) and (min-width: 400px) {
+  #responsiveContainer .backButton.moreThanTwoPanes,
+  #responsiveContainer .backButton.moreThanMaxPanes {
+    visibility: visible!important;
+  }
   #responsiveContainer #MQmatch {
     width: 2px;
   }
@@ -204,6 +214,11 @@
   }
 }
 @media (max-width: 400px) {
+  #responsiveContainer .backButton.twoPanes,
+  #responsiveContainer .backButton.moreThanTwoPanes,
+  #responsiveContainer .backButton.moreThanMaxPanes {
+    visibility: visible!important;
+  }
   #responsiveContainer #MQmatch {
     width: 3px;
   }
@@ -260,7 +275,7 @@
     width: 400%;
   }
 }
-@media (min-width: 401px) and (max-width: 800px) {
+@media (min-width: 400px) and (max-width: 800px) {
   #responsiveContainer #MQmatch {
     height: 2px;
   }
@@ -315,45 +330,53 @@
 .mblBackground {
   background-color: #c5ccd3;
 }
-
-
-
-
-
-@keyframes shake{ 
-0% { transform: translateX(4px); } 
-50% { transform: translateX(-4px); }
-100% { transform: translateX(4px); }  
-} 
-
-@-moz-keyframes shake{ 
-0% { -moz-transform: translateX(4px); } 
-50% { -moz-transform: translateX(-4px); } 
-100% { -moz-transform: translateX(4px); }  
-} 
-
-@-webkit-keyframes shake { 
-0% { -webkit-transform: translateX(4px); } 
-50% { -webkit-transform: translateX(-4px); } 
-100% { -webkit-transform: translateX(4px); }  
-} 
-
-.shake{ 
-animation-name: shake; 
-animation-duration: 0.1s; 
-transform-origin:50% 50%; 
-animation-iteration-count: 3; 
-animation-timing-function: linear; 
-
--moz-animation-name: shake; 
--moz-animation-duration: 0.1s; 
--moz-transform-origin:50% 50%; 
--moz-animation-iteration-count: 3; 
--moz-animation-timing-function: linear; 
-
--webkit-animation-name: shake; 
--webkit-animation-duration: 0.1s; 
--webkit-transform-origin:50% 50%; 
--webkit-animation-iteration-count: 3; 
--webkit-animation-timing-function: linear; 
+@keyframes shake {
+  0% {
+    transform: translateX(4px);
+  }
+  50% {
+    transform: translateX(-4px);
+  }
+  100% {
+    transform: translateX(4px);
+  }
+}
+@-moz-keyframes shake {
+  0% {
+    -moz-transform: translateX(4px);
+  }
+  50% {
+    -moz-transform: translateX(-4px);
+  }
+  100% {
+    -moz-transform: translateX(4px);
+  }
+}
+@-webkit-keyframes shake {
+  0% {
+    -webkit-transform: translateX(4px);
+  }
+  50% {
+    -webkit-transform: translateX(-4px);
+  }
+  100% {
+    -webkit-transform: translateX(4px);
+  }
+}
+.shake {
+  animation-name: shake;
+  animation-duration: 0.1s;
+  transform-origin: 50% 50%;
+  animation-iteration-count: 3;
+  animation-timing-function: linear;
+  -moz-animation-name: shake;
+  -moz-animation-duration: 0.1s;
+  -moz-transform-origin: 50% 50%;
+  -moz-animation-iteration-count: 3;
+  -moz-animation-timing-function: linear;
+  -webkit-animation-name: shake;
+  -webkit-animation-duration: 0.1s;
+  -webkit-transform-origin: 50% 50%;
+  -webkit-animation-iteration-count: 3;
+  -webkit-animation-timing-function: linear;
 }

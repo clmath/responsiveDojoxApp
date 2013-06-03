@@ -48,9 +48,10 @@ define([
 			domNode: null,
 			header: null,
 			slider: null,
+			backButton: null,
 			maxPanes: 3,
 			currentDepth: 0,
-			depths: ["root"], //dummy element to start the index at 1
+			depths: ["root"] //dummy element to start the index at 1
 		},
 
 		// SidePane 
@@ -85,6 +86,13 @@ define([
 				}
 			}
 			
+			// Testing for the presence of a back button
+			
+			if(dom.byId("back")){
+				this._multiPanes.backButton = dom.byId("back");
+			}
+			
+			
 			// Setting up the callback map
 			this._cbMap = {inPlaceTransition: {status: false, start: lang.hitch(this, this._inPlaceTransition), end: lang.hitch(this, this._inPlaceTransitionEnd)}, //status = true while there is an ongoing transition 
 							slideTransition: {status: false, start: lang.hitch(this, this._baseTransition), end: lang.hitch(this, this._slideTransitionEnd)},
@@ -98,7 +106,7 @@ define([
 			this._multiPanes.domNode = domConstruct.place("<div id='multiPanes'></div>", this.domNode, "first");
 			this._multiPanes.slider = domConstruct.place("<div id='slider'></div>", this._multiPanes.domNode, "first");
 			this._MQDiv = domConstruct.place("<div id='MQmatch'></div>", this._multiPanes.domNode, "first");
-
+			
 			if(this._multiPanes.header){
 				domConstruct.place(this._multiPanes.header, this._multiPanes.domNode, "first");
 				this._multiPanes.slider.style.marginTop="-"+this._multiPanes.header.offsetHeight+"px";
@@ -107,6 +115,7 @@ define([
 			
 			// dojoDisplay event should have a detail.view string property containing the id of the view to display
 			on(win.body(), "dojodisplay", lang.hitch(this, "display"));
+			on(win.body(), "dojoback", lang.hitch(this, "back"));
 			
 			// Load default
 			this.emit("dojodisplay", {bubbles: true, cancelable: true, detail: {viewId: this.mainView}});
@@ -181,7 +190,7 @@ define([
 						
 					//Slide transition
 					if(animate && (this._multiPanes.currentDepth > currentMaxPanes)){
-						this._startTransition(this._multiPanes.slider, "slideTransition");
+						this.defer(function(){this._startTransition(this._multiPanes.slider, "slideTransition")},0);
 					}else if(this._multiPanes.currentDepth > currentMaxPanes){
 						this._cbMap["slideTransition"].end(this._multiPanes.slider, "slideTransition");
 					}
@@ -211,6 +220,10 @@ define([
 					for(i = this._multiPanes.maxPanes; i > this._multiPanes.currentDepth; i--){
 						domClass.remove(this._multiPanes.slider, "col"+i);
 					}
+				}
+				
+				if(this._multiPanes.backButton){
+					this._updateBackStyle();
 				}
 			}else if(type[0] === "sidePane"){
 				var side = type[1] || "left";
@@ -245,6 +258,27 @@ define([
 				this._sidePane.viewId = viewId;
 				this._sidePane.side = side;
 			}
+		},
+		
+		back: function(){
+			var index = this._multiPanes.depths.length-2; //2 because we want to go back to the next to last view 
+			if(index > 0){ // strict inequality because the views start at index 1
+				this.emit("dojodisplay", {bubbles: true, cancelable: true, detail: {viewId: this._multiPanes.depths[index]}});
+			}
+		},
+		
+		_updateBackStyle: function(){
+			var nbPanes = this._multiPanes.depths.length-1; // -1 because the 0 element is unsignificant
+			var newClass = "";
+			if(nbPanes > this._multiPanes.maxPanes){
+				newClass = "moreThanMaxPanes";
+			}else if(nbPanes > 2){
+				newClass = "moreThanTwoPanes";
+			}else if(nbPanes === 2){
+				newClass = "twoPanes";
+			}
+			domClass.remove(this._multiPanes.backButton, "moreThanTwoPanes moreThanMaxpanes twoPanes");
+			domClass.add(this._multiPanes.backButton, newClass);
 		},
 		
 		_hideSidePane: function(){
