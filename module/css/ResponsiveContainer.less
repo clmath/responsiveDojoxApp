@@ -13,7 +13,6 @@
 @MQBreakpoint1: 400px;
 @MQBreakpoint2: 800px;
 
-@_MQBreakpoint1P: @MQBreakpoint1+1;
 @maxValue: 0;
 .max (@a; @b) when (@a >= @b) { @maxValue: @a }
 .max (@a; @b) when (@a < @b) { @maxValue: @b }
@@ -35,7 +34,7 @@
 	-ms-transform: @arguments;
 	transform: @arguments;
 }
-.HWAcceleration(){
+.HWAcceleration(){//Only for iThings
 	-webkit-backface-visibility: hidden;
 	-moz-backface-visibility: hidden;
 	-ms-backface-visibility: hidden;
@@ -61,6 +60,13 @@
 		width: (100%/(@maxPanes+1));
 		height: 100%;
 		.HWAcceleration();
+	}
+
+	.backButton{
+		visibility: hidden;
+	}
+	.backButton.moreThanMaxPanes{
+		visibility: visible!important;
 	}
 	
 	>.view{display:none;}
@@ -182,8 +188,12 @@
 	}
 
 	/* MediaQueries when multiPanes is NOT overlayed*/
-	@media (max-width: @MQBreakpoint2) and (min-width: @_MQBreakpoint1P) {
+	@media (max-width: @MQBreakpoint2) and (min-width: @MQBreakpoint1) {
 		// Scope variables : @i
+		
+		.backButton.moreThanTwoPanes, .backButton.moreThanMaxPanes{
+			visibility: visible!important;
+		}
 		
 		#MQmatch {
 			width: 2px;
@@ -214,6 +224,10 @@
 
 	@media (max-width: @MQBreakpoint1){
 		// Scope variables : @i
+		
+		.backButton.twoPanes, .backButton.moreThanTwoPanes, .backButton.moreThanMaxPanes{
+			visibility: visible!important;
+		}
 		
 		#MQmatch {
 			width: 3px;
@@ -312,7 +326,7 @@
 	}
 	
 	/* Mediaqueries for the portrait tablet-like sliding pane */
-	@media (min-width: @_MQBreakpoint1P) and (max-width: @MQBreakpoint2) {
+	@media (min-width: @MQBreakpoint1) and (max-width: @MQBreakpoint2) {
 		#MQmatch{
 			height: 2px;
 		}
@@ -383,3 +397,44 @@
 .mblBackground {
   background-color: #c5ccd3;
 } 
+
+
+
+@keyframes shake{ 
+0% { transform: translateX(4px); } 
+50% { transform: translateX(-4px); }
+100% { transform: translateX(4px); }  
+} 
+
+@-moz-keyframes shake{ 
+0% { -moz-transform: translateX(4px); } 
+50% { -moz-transform: translateX(-4px); } 
+100% { -moz-transform: translateX(4px); }  
+} 
+
+@-webkit-keyframes shake { 
+0% { -webkit-transform: translateX(4px); } 
+50% { -webkit-transform: translateX(-4px); } 
+100% { -webkit-transform: translateX(4px); }  
+} 
+
+.shake{ 
+animation-name: shake; 
+animation-duration: 0.1s; 
+transform-origin:50% 50%; 
+animation-iteration-count: 3; 
+animation-timing-function: linear; 
+
+-moz-animation-name: shake; 
+-moz-animation-duration: 0.1s; 
+-moz-transform-origin:50% 50%; 
+-moz-animation-iteration-count: 3; 
+-moz-animation-timing-function: linear; 
+
+-webkit-animation-name: shake; 
+-webkit-animation-duration: 0.1s; 
+-webkit-transform-origin:50% 50%; 
+-webkit-animation-iteration-count: 3; 
+-webkit-animation-timing-function: linear; 
+}
+
