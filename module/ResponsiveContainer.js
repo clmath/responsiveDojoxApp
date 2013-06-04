@@ -115,7 +115,6 @@ define([
 			
 			// dojoDisplay event should have a detail.view string property containing the id of the view to display
 			on(win.body(), "dojodisplay", lang.hitch(this, "display"));
-			on(win.body(), "dojoback", lang.hitch(this, "back"));
 			
 			// Load default
 			this.emit("dojodisplay", {bubbles: true, cancelable: true, detail: {viewId: this.mainView}});
@@ -151,6 +150,8 @@ define([
 		display: function(e){
 			var viewId = e.detail.viewId;
 			if(!viewId){return;}
+			if(viewId === "back"){this.back(); return;} // We want to go back to the previous state
+			
 			var animate = e.detail.animate || false;
 			var viewDomNode = dom.byId(viewId);
 			if(!viewDomNode){return;}

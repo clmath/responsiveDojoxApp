@@ -43,16 +43,11 @@
 			require(["dojo/on", "dojo/parser", "dojox/mobile","dojo/ready"],
 			function(on, parser) {
 				
-				back = function(event){
-					on.emit(event.target,"dojoback",{
-						bubbles: true,
-						cancelable: true});
-				};
-				
-				show = function(event, targetView){
+				show = function(event, targetView, animate){
+					animate = animate || true;
 					on.emit(event.target,"dojodisplay",{
 						bubbles: true,
-						cancelable: true, detail: {viewId: targetView, animate: true}});
+						cancelable: true, detail: {viewId: targetView, animate: animate}});
 				};
 				
 				showMaker = function(targetView){
@@ -71,7 +66,7 @@
 			
 			<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Music Player"'>
 				<span data-dojo-type="dojox/mobile/ToolBarButton" data-dojo-props="icon:'mblDomButtonGrayKnob', onClick:function(event){show(event, 'settings')}" style="float:left;" ></span> 
-				<span id="back" class="backButton" data-dojo-type="dojox/mobile/ToolBarButton" data-dojo-props="arrow:'left', onClick:function(event){back(event)}" style="float:left">Back</span>
+				<span id="back" class="backButton" data-dojo-type="dojox/mobile/ToolBarButton" data-dojo-props="arrow:'left', onClick:function(event){show(event, 'back', false)}" style="float:left">Back</span>
 				<span data-dojo-type="dojox/mobile/ToolBarButton" data-dojo-props="onClick:function(event){show(event, 'playing')}" style="float:right;" >
 					<img src="../../module/css/cd_low.png" style="max-height: 25px;margin-top:2px;"/>
 				</span>
